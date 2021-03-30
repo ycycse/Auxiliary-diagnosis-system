@@ -60,18 +60,18 @@ class Get_data():
         # 获取时间
         time_in = re.findall('"mapLastUpdatedTime":"(.*?)"', response.text)[0]
         time_out = re.findall('"foreignLastUpdatedTime":"(.*?)"', response.text)[0]
-        print(time_in)
-        print(time_out)
+        # print(time_in)
+        # print(time_out)
 
         # 生成HTML对象
         html = etree.HTML(response.text)
         # 解析数据
         result = html.xpath('//script[@type="application/json"]/text()')
-        print(type(result))
+        # print(type(result))
         result = result[0]
-        print(type(result))
+        # print(type(result))
         result = json.loads(result)
-        print(type(result))
+        # print(type(result))
         # 以每个省的数据为一个字典
         data_in = result['component'][0]['caseList']
         # for each in data_in:

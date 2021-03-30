@@ -18,7 +18,7 @@ def china_map(update_time):
     area = []
     confirmed = []
     for each in data:
-        print(each)
+        # print(each)
         area.append(each['area'])
         confirmed.append(each['confirmed'])
     map.to_map_china(area, confirmed, update_time)
