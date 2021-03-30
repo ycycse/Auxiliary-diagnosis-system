@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="{% static 'layui/css/layui.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'other/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'other/css/result/detail.css' %}" rel="stylesheet" type="text/css" />
+    <title>Vienna</title>
+</head>
+
+<body>
+
+    <!-- PRELOADER -->
+    <div class="wpc-preloader">
+        <div class="wrap-load">
+            <div class="cssload-tetrominos">
+                <div class="cssload-tetromino cssload-box1"></div>
+                <div class="cssload-tetromino cssload-box2"></div>
+                <div class="cssload-tetromino cssload-box3"></div>
+                <div class="cssload-tetromino cssload-box4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container-fluid padd-l-100 marg-lg-b15 wpc-header">
+            <div class="row">
+            </div>
+        </div>
+    </header>
+
+     <!-- CONTENT -->
+
+   <div class="container-fluid padd-l-100 marg-lg-t30 no-padd-xs">
+       <div class="row" margin-left = "-69px">
+           <div class="col-xs-12 col-md-8 no-padding">
+                <div class="gallery-section wpc-h full-page">
+                    <div class="s-back-switch slide-wrap wpc-h">
+                        <img src="{% static 'result/' %}{{ append_img }}" alt="gallery" class="s-img-switch">
+                    </div>
+                </div>
+           </div>
+           <div class="col-md-4">
+               <aside class="wpc-sidebar classic no-opacity">
+                <i class="fa fa-times"></i>
+                  <div class="heading marg-lg-b50">{{ judge }}</div>
+                  <div class="info">
+                      该检测结果仅为模型处理后所得结果 <br class="visible-lg-large">
+                      <div class="marg-lg-t20 info-group">
+                          <p><span class="detail-info">患者编号:1002</span></p>
+                          <p><span class="detail-info">检测类型:医生上传</span></p>
+                          <p><span class="detail-info">检测时间:2020/1/22</span></p>
+                      </div>
+                  </div>
+                  <div class="btn-toggle-slider small modern">
+                      <a href="" class="slide-prev slide"><i class="fa fa-angle-left"></i></a>
+                      <a href="" class="slide-next slide"><i class="fa fa-angle-right"></i></a>
+                  </div>
+                   <br><br><br>
+                    <button type="button" class="layui-btn layui-btn-radius">分割图像</button>
+               </aside>
+           </div>
+       </div>
+   </div>
+
+
+
+    <!-- FOOTER -->
+
+    <footer class="wpc-footer">
+        <div class="container-fluid padd-l-100">
+            <div class="row">
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="{% static 'other/js/jquery-2.2.3.min.js' %}"></script>
+    <script src="{% static 'other/js/main.js' %}"></script>
+
+</body>
+
+</html>

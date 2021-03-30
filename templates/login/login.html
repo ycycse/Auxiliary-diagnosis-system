@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="{% static 'other/css/login/body.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'other/css/login/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'other/css/layui.css' %}" media="all" type="text/css">
+
+    <link rel="stylesheet" href="{% static 'other/css/laydate.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'other/css/code.css' %}" type="text/css">
+    <!-- 先引入 jquery -->
+    <script type="text/javascript" src="{% static 'other/js/jquery-1.4.4.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'other/js/layui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'other/js/layui.all.js' %}"></script>
+</head>
+<body class="body">
+<div class="container">
+    <section id="content">
+        <form class="layui-form" method="post" action="{% url 'login:login' %}">
+            {% csrf_token %}{# 随机码 #}
+            <h1>登 录</h1>
+
+            <!--身份（医生或是患者）-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份 <i style="color:#ff0000">*</i></label>
+                <div class="layui-input-block">
+                    <select name="identity" lay-verify="required">
+                        <option value=""></option>
+                        <option value="0">医生</option>
+                        <option value="1">患者</option>
+
+                    </select>
+                </div>
+            </div>
+
+            <!--用户名-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名 <i style="color:#ff0000">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" lay-verify="required|username"
+                           placeholder="请输入用户名"
+                           class="layui-input">
+                </div>
+            </div>
+
+            <!--密码-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码 <i style="color:red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" lay-verify="required|password" placeholder="请输入密码"
+                           class="layui-input">
+                </div>
+            </div>
+
+            <!--登录按钮-->
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 0px">
+                    <button class="layui-btn" lay-submit onclick="" style="width: 200px;" id="commit" lay-filter="*">
+                        登录
+                    </button>
+                </div>
+            </div>
+
+        </form><!-- form -->
+        <div class="button">
+            <span class="help-block u-errormessage" id="js-server-helpinfo">&nbsp;</span>
+            <a href="{% url 'login:register' %}">注册</a>
+        </div> <!-- button -->
+    </section><!-- content -->
+</div>
+<!-- container -->
+
+
+<br><br><br><br>
+</body>
+<script>
+    layui.use(['layer', 'form', 'upload'], function (data) {
+        var layer = layui.layer;
+        var form = layui.form;
+        var upload = layui.upload;
+        var $ = layui.jquery;
+        form.render();//表单渲染
+
+        {% if login_errmsg %}
+            layer.msg('{{ login_errmsg }}');
+        {% endif %}
+
+        //表单验证
+        form.verify({
+            username: function (value, item) { //value：表单的值、item：表单的DOM对象
+                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '用户名不能有特殊字符';
+                }
+                if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+                if (/^\d+\d+\d$/.test(value)) {
+                    return '用户名不能全为数字';
+                }
+            }, password: function (value, item) {
+                var username = $('input[name="username"]').val();
+                var password = $('input[name="password"]').val();
+                var identity= $('select[name="identity"]').val();
+
+                if (!/^[\S]{6,12}$/.test(value)) {
+                    return '密码必须6到12位，且不能出现空格';
+                }
+
+                var infos = '';
+                $.ajax({
+                    type: 'post',
+                    url: "{% url 'login:verify_account' %}",
+                    async: false,
+                    data: {
+                        username: username,
+                        password: password,
+                        identity: identity,
+                        csrfmiddlewaretoken: '{{ csrf_token  }}'
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        infos = data.info;
+                    }
+                });
+                if (infos === 'username_false') {
+                    return '用户不存在';
+                }
+                if (infos === 'password_false') {
+                    return '密码错误';
+                }
+                if (infos === 'identity_false') {
+                    return '身份不匹配'
+                }
+            }
+        });
+        //表单提交
+        form.on('submit(*)', function (data) {
+            var $ = layui.jquery;
+            return true;
+        });
+    })
+
+</script>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="{% static 'other/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'other/css/dropzone/basic.css' %}" rel="stylesheet">
+    <link href="{% static 'other/css/dropzone/dropzone.css' %}" rel="stylesheet">
+    <link href="{% static 'other/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>CT在线检测工具</h2>
+                    <ol class="breadcrumb">
+                        <li class="active">
+                            <strong>CT Recognition Tool Online</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeIn">
+            <div class="row">
+                <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+<!--                        <h5>图片/文件上传区域</h5>-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图片/文件上传区域</label>
+                            <div class="layui-input-inline">
+                              <input type="text" name="username" lay-verify="required" placeholder="请输入患者编号" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="my-awesome-dropzone" class="dropzone" method="post" action="{% url 'diagnosis:pic_process' %}">
+                            {% csrf_token %}
+                            <div class="dropzone-previews">点击或拖拽上传</div>
+                            <button id = "submit" class="btn btn-primary pull-right">提交检测</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            </div>
+
+        </div>
+        </div>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="{% static 'other/js/jquery-2.2.3.min.js' %}"></script>
+
+
+    <!-- DROPZONE -->
+    <script src="{% static 'other/js/dropzone/dropzone.js' %}"></script>
+
+
+    <script>
+    $("#my-awesome-dropzone").submit(function(){
+<!--        return false;-->
+    })
+    Dropzone.options.myAwesomeDropzone = {
+
+        autoProcessQueue: false,
+        acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
+        maxFilesize: 1,
+        parallelUploads: 10,
+        addRemoveLinks: true,
+        init: function() {
+        var submitButton = document.querySelector("#submit")
+        myDropzone = this; // closure
+
+        submitButton.addEventListener("click", function() {
+            myDropzone.processQueue();
+            // autoProcessQueue: true// Tell Dropzone to process all queued files.
+        });
+
+        // You might want to show the submit button only when
+        // files are dropped here:
+        this.on("addedfile", function() {
+          // Show submit button here and/or inform user to click it.
+        });
+
+        }
+    };
+<!--        $(document).ready(function(){-->
+
+<!--            Dropzone.options.myAwesomeDropzone = {-->
+
+<!--                autoProcessQueue: false,-->
+<!--                uploadMultiple: true,-->
+<!--                parallelUploads: 100,-->
+<!--                maxFiles: 1,-->
+
+<!--                // Dropzone settings-->
+<!--                init: function() {-->
+<!--                    var myDropzone = this;-->
+
+<!--                    this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {-->
+<!--                        console.log("fuck");-->
+<!--                        e.preventDefault();-->
+<!--                        e.stopPropagation();-->
+<!--                        myDropzone.processQueue();-->
+<!--                    });-->
+<!--                    this.on("sendingmultiple", function() {-->
+<!--                        console.log("what");-->
+<!--                    });-->
+<!--                    this.on("successmultiple", function(files, response) {-->
+<!--                        console.log("success");-->
+<!--                        console.log(files);-->
+<!--                    });-->
+<!--                    this.on("errormultiple", function(files, response) {-->
+<!--                        console.log("fail");-->
+<!--                        console.log(files);-->
+<!--                    });-->
+<!--                }-->
+
+<!--            }-->
+
+<!--       });-->
+    </script>
+
+</body>
+
+</html>
+

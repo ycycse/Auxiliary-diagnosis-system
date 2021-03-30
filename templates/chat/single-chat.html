@@ -1,0 +1,943 @@
+{% extends 'chat/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    聊天室
+{% endblock %}
+
+{% block main %}
+    <div class="main px-xl-5 px-lg-4 px-3">
+
+        <div class="chat-body">
+
+            <div class="chat-header border-bottom py-xl-4 py-md-3 py-2">
+                <div class="container-xxl">
+                    <div class="row align-items-center">
+
+                        <div class="col-6 col-xl-4">
+                            <div class="media">
+                                <div class="me-3 show-user-detail">
+                                    <span class="status rounded-circle"></span>
+                                    <img class="avatar rounded-circle"
+                                         src="{% static 'web_im/dist/assets/images/xs/avatar5.jpg' %}"
+                                         alt="avatar">
+                                </div>
+                                <div class="media-body overflow-hidden">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <h6 class="text-truncate mb-0 me-auto">{{ current_to_user.nickname }}</h6>
+                                    </div>
+                                    <div class="text-truncate" id="online-status">online</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-xl-8 text-end">
+                            <ul class="nav justify-content-end">
+                                <li class="nav-item list-inline-item d-none d-md-block me-3">
+                                    <a href="#" class="nav-link text-muted px-3" data-toggle="collapse"
+                                       data-target="#chat-search-div" aria-expanded="true"
+                                       title="Search this chat">
+                                        <i class="zmdi zmdi-search zmdi-hc-lg"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item list-inline-item d-none d-sm-block me-3">
+                                    <a href="#" class="nav-link text-muted px-3" title="videocam">
+                                        <i class="zmdi zmdi-videocam zmdi-hc-lg"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item list-inline-item d-none d-sm-block me-3">
+                                    <a href="audio-call.html" class="nav-link text-muted px-3" title="Call">
+                                        <i class="zmdi zmdi-phone-forwarded zmdi-hc-lg"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item list-inline-item add-user-btn">
+                                    <a href="#" class="nav-link text-muted px-3" title="Add Account">
+                                        <i class="zmdi zmdi-account-add zmdi-hc-lg"></i>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item list-inline-item d-block d-sm-none px-3">
+                                    <div class="dropdown">
+                                        <a class="nav-link text-muted px-0" href="#" data-toggle="dropdown"
+                                           aria-haspopup="true" aria-expanded="false">
+                                            <i class="zmdi zmdi-more-vert zmdi-hc-lg"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">Search chat</a>
+                                            <a class="dropdown-item" href="#">Attache Image</a>
+                                            <a class="dropdown-item" href="#">Video call</a>
+                                            <a class="dropdown-item" href="#">Call</a>
+                                            <a class="dropdown-item" href="#">Add New</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse" id="chat-search-div">
+                <div class="container-xxl py-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control"
+                               placeholder="Find messages in current conversation">
+                        <div class="input-group-append">
+                            <span class="input-group-text text-muted">0 / 0</span>
+                        </div>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary">Search</button>
+                            <button type="button"
+                                    class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right shadow border-0">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div role="separator" class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-content" id="chat-content">
+                <div class="container-xxl">
+                    <ul class="list-unstyled py-4" id="chat-content-list">
+
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chat-footer border-top py-xl-4 py-lg-2 py-2">
+                <div class="container-xxl">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="input-group align-items-center">
+
+                                <input type="text" class="form-control border-0 pl-0" id="chat-message-input"
+                                       placeholder="Type your message...">
+
+                                <div class="input-group-append d-none d-sm-block">
+											<span class="input-group-text border-0">
+												<button class="btn btn-sm btn-link text-muted" data-toggle="tooltip"
+                                                        title="查询历史信息" type="button" id="search-history"><i
+                                                        class="zmdi zmdi-refresh font-22"></i></button>
+											</span>
+                                </div>
+                                <div class="input-group-append">
+											<span class="input-group-text border-0">
+												<button class="btn btn-sm btn-link text-muted" data-toggle="tooltip"
+                                                        title="Smaily" type="button"><i
+                                                        class="zmdi zmdi-mood font-22"></i></button>
+											</span>
+                                </div>
+                                <div class="input-group-append">
+											<span class="input-group-text border-0">
+												<button class="btn btn-sm btn-link text-muted" data-toggle="tooltip"
+                                                        title="Attachment" type="button"><i
+                                                        class="zmdi zmdi-attachment font-22"></i></button>
+											</span>
+                                </div>
+
+                                <div class="input-group-append">
+											<span class="input-group-text border-0 pr-0">
+												<button type="submit" class="btn btn-primary" id="chat-message-submit">
+													<span class="d-none d-md-inline-block me-2">Send</span>
+													<i class="zmdi zmdi-mail-send"></i>
+												</button>
+											</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="user-detail-sidebar py-xl-4 py-3 px-xl-4 px-3">
+            <div class="d-flex flex-column">
+                <div class="header border-bottom pb-4 d-flex justify-content-between">
+                    <div>
+                        <h6 class="mb-0 font-weight-bold">User Details</h6>
+                        <span class="text-muted">Update your profile details</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-link text-muted close-chat-sidebar" type="button"><i
+                                class="zmdi zmdi-close"></i></button>
+                    </div>
+                </div>
+                <div class="body mt-4">
+                    <div class="d-flex justify-content-center">
+                        <div class="avatar xxl">
+                            <img class="avatar xxl rounded-circle"
+                                 src="{% static 'web_im/dist/assets/images/sm/avatar2.jpg' %}"
+                                 alt="avatar">
+                        </div>
+                    </div>
+                    <div class="text-center mt-3 mb-5">
+                        <h4>Jason Porter</h4>
+                        <span class="text-muted"><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                                    data-cfemail="4c21252f2429202029622b3e2929220c2b212d2520622f2321">[email&#160;protected]</a></span>
+                        <p>+14 123 456 789 - New york (USA)</p>
+                    </div>
+
+                    <ul class="chat-list">
+                        <li class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                            <span>mutual friend</span>
+                        </li>
+                        <li>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar1.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Michelle Green</h6>
+                                            </div>
+                                            <div class="text-truncate">+14 123 456 258</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar2.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Jason Porter</h6>
+                                            </div>
+                                            <div class="text-truncate">+14 123 456 963</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar3.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Elizabeth Martin</h6>
+                                            </div>
+                                            <div class="text-truncate">+14 123 456 753</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="addnew-user-sidebar py-xl-4 py-3 px-xl-4 px-3">
+            <div class="d-flex flex-column">
+                <div class="header border-bottom pb-4 d-flex justify-content-between">
+                    <div>
+                        <h6 class="mb-0 font-weight-bold">Add new member</h6>
+                        <span class="text-muted">Update your profile details</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-link text-muted close-chat-sidebar" type="button"><i
+                                class="zmdi zmdi-close"></i></button>
+                    </div>
+                </div>
+                <div class="body mt-4">
+
+                    <div class="form-group input-group-lg search mb-3">
+                        <i class="zmdi zmdi-search"></i>
+                        <input type="text" class="form-control" placeholder="Search...">
+                    </div>
+
+                    <ul class="chat-list">
+                        <li class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                            <span>A</span>
+                            <div class="dropdown">
+                                <a class="btn btn-link px-1 py-0 border-0 text-muted dropdown-toggle" href="#"
+                                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false"></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar1.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Amelia Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 2 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar3.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Ava Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 1 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                            <span>C</span>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar4.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Charlotte Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 6 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar5.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Chloe Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 3 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar6.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Charles Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 2 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                            <span>D</span>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar4.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">David Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 6 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                            <span>M</span>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar8.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Michael Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 6 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar8.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Mohammad</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 6 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                            <span>T</span>
+                        </li>
+                        <li>
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-plus-circle"></i></button>
+                            </div>
+                            <a href="#" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/xs/avatar9.jpg' %}"
+                                                 alt="avatar">
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">Tommy Green</h6>
+                                            </div>
+                                            <div class="text-truncate">
+                                                last seen 6 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        function getCookie(cookiename) {
+            var name = cookiename + "=";
+            var cs = document.cookie.split(';');
+            for (var i = 0; i < cs.length; i++) {
+                var c = cs[i].trim();
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+        }
+
+        function push_right_message(msg, now) {
+            document.getElementById('chat-content-list').innerHTML += `<li class="d-flex message right">
+                            <div class="message-body"><span class="date-time text-muted">` + now + `
+                                            <i class="zmdi zmdi-check-all text-primary"></i></span>
+                                <div class="message-row d-flex align-items-center justify-content-end">
+
+                                    <div class="dropdown">
+                                        <a class="text-muted me-1 p-2 text-muted" href="#"
+                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">Edit</a>
+                                            <a class="dropdown-item" href="#">Share</a>
+                                            <a class="dropdown-item" href="#">Delete</a>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="message-content border p-3">
+                                        ` + msg + `
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`
+        }
+
+        function push_left_message(msg, now, sendUserNickname) {
+            document.getElementById('chat-content-list').innerHTML += `<li class="d-flex message">
+
+									<div class="mr-lg-3 me-2">
+										<img class="avatar sm rounded-circle" src="{% static 'web_im/dist/assets/images/xs/avatar1.jpg' %}"
+											alt="avatar">
+
+									</div>
+
+									<div class="message-body">
+										<span class="date-time text-muted">` + sendUserNickname + ',' + now + `</span>
+										<div class="message-row d-flex align-items-center">
+
+											<div class="message-content p-3">`
+                + msg +
+                `</div>
+
+											<div class="dropdown">
+												<a class="text-muted ms-1 p-2 text-muted" href="#"
+													data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<i class="zmdi zmdi-more-vert"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-right">
+													<a class="dropdown-item" href="#">Edit</a>
+													<a class="dropdown-item" href="#">Share</a>
+													<a class="dropdown-item" href="#">Delete</a>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</li>`
+        }
+
+
+        //alert(getCookie('username'));
+        var username = getCookie('username');
+        var userList = new Array();
+        var messageList = new Array();
+        var online_user_list = new Array();
+
+        var roomName ={{ room_name_json }};
+
+        var chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onopen = function (e) {
+            //console.log(e);
+            //console.log(username + '进入聊天室了');
+            chatSocket.send(JSON.stringify({
+                code: 100,
+                username: username
+            }))
+        };
+
+        chatSocket.onmessage = function (e) {
+            let data = JSON.parse(e.data);
+            let message = data['message'];
+            let code = message.code;
+
+            if (code == 200) {
+                messageList = message.messageList;
+                let messageItem = message.messageItem;
+                console.log(messageList)
+
+                {#let now = new Date().toLocaleTimeString('cn', {hour12: false});#}
+
+                let text = messageItem.text;
+                let sendUsername = messageItem.sendUsername;
+                let sendUserNickname = messageItem.sendUserNickname;
+                let time = messageItem.time;
+
+                if (sendUsername === username) {
+                    push_right_message(text, time);
+                } else {
+                    push_left_message(text, time, sendUserNickname);
+                }
+
+                let div = document.getElementById('chat-content');
+                div.scrollTop = div.scrollHeight;
+            }
+
+
+            if (code == 100) {
+                userList = message.userList;
+                let newComer = message.newComer;
+                messageList = message.messageList;
+                console.log(newComer + "进入聊天室" + roomName + "了");
+                console.log("当前聊天室用户：");
+                console.log(userList);
+
+                if (userList.length > 2 && username === newComer) {
+                    alert('当前聊天室已满！');
+                    top.location.reload();
+                }
+
+                if (userList.length == 1) {
+                    document.getElementById('online-status').innerHTML = '对方正忙';
+                } else if (userList.length == 2) {
+                    document.getElementById('online-status').innerHTML = '对方正在房间中'
+                }
+
+                if (newComer === username) {
+                    messageList.forEach(function (value, index) {
+                        let text = value.text;
+                        let sendUsername = value.sendUsername;
+                        let sendUserNickname = value.sendUserNickname;
+                        let time = value.time;
+
+                        if (sendUsername === username) {
+                            push_right_message(text, time);
+                        } else {
+                            push_left_message(text, time, sendUserNickname);
+                        }
+                    });
+
+                    let div = document.getElementById('chat-content');
+                    div.scrollTop = div.scrollHeight;
+                }
+
+            }
+
+
+            if (code == 888) {
+                userList = message.userList;
+                //total_user_list = message.total_user_list;
+                let leave_user = message.leave_user;
+                console.log(leave_user + "离开聊天室了");
+                console.log(userList);
+            }
+
+            if (code == 666) {
+                let applicant = message.applicant;
+                let history_message_list = message.history_message_list;
+
+                if (username == applicant) {
+                    history_message_list.forEach(function (value, index) {
+                        let text = value.text;
+                        let sendUsername = value.sendUsername;
+                        let sendUserNickname = value.sendUserNickname;
+                        let time = value.time;
+
+                        if (sendUsername === username) {
+                            push_right_message(text, time);
+                        } else {
+                            push_left_message(text, time, sendUserNickname);
+                        }
+                    });
+
+                    let div = document.getElementById('chat-content');
+                    div.scrollTop = div.scrollHeight;
+                }
+
+            }
+
+        };
+
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        window.onunload = function () {
+            chatSocket.send(JSON.stringify({
+                code: 888,
+                username: username
+            }));
+        }
+
+
+        var indexSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/index/'
+        );
+
+        indexSocket.onopen = function (e) {
+            console.log("聊天室Index socket连接成功！");
+            indexSocket.send(JSON.stringify({
+                code: 100,
+                username: username
+            }))
+        };
+
+        indexSocket.onmessage = function (e) {
+            let data = JSON.parse(e.data);
+            let message = data['message'];
+            let code = message.code;
+
+            if (code == 100) {
+                online_user_list = message.online_user_list;
+                let unread_sender_list = message.unread_sender_list;
+
+
+                let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                console.log(contact_list);
+                for (let i = 0; i < contact_list.length; i++) {
+                    //console.log(contact_list[i].id);
+                    let contact = contact_list[i];
+                    let contact_name = contact.id.slice(8);
+                    console.log(contact_name);
+                    if (online_user_list.includes(contact_name)) {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                        if (unread_sender_list.includes(contact_name)) {
+                            text.innerHTML = "[在线]有未读消息";
+                        }
+
+                    } else {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                        if (unread_sender_list.includes(contact_name)) {
+                            text.innerHTML = "[离线]有未读消息";
+                        }
+                    }
+                }
+
+                let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                console.log(chat_list);
+                for (let i = 0; i < chat_list.length; i++) {
+                    let chat = chat_list[i];
+                    let chat_name = chat.id.slice(5);
+                    console.log(chat_name);
+                    if (online_user_list.includes(chat_name)) {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                        if (unread_sender_list.includes(chat_name)) {
+                            text.innerHTML = "[在线]+有未读消息";
+                        }
+                    } else {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                        if (unread_sender_list.includes(chat_name)) {
+                            text.innerHTML = "[离线]+有未读消息";
+                        }
+                    }
+                }
+
+            }
+
+            if (code == 888) {
+                online_user_list = message.online_user_list;
+
+                let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                console.log(contact_list);
+                for (let i = 0; i < contact_list.length; i++) {
+                    //console.log(contact_list[i].id);
+                    let contact = contact_list[i];
+                    let contact_name = contact.id.slice(8);
+                    console.log(contact_name);
+                    if (online_user_list.includes(contact_name)) {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                    } else {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                    }
+                }
+
+                let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                console.log(chat_list);
+                for (let i = 0; i < chat_list.length; i++) {
+                    let chat = chat_list[i];
+                    let chat_name = chat.id.slice(5);
+                    console.log(chat_name);
+                    if (online_user_list.includes(chat_name)) {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                    } else {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                    }
+                }
+            }
+
+            if (code == 200) {
+                let receiver_name = message.receiver_name;
+                let sender_name = message.sender_name;
+                let room_id = message.room_id;
+                let text = message.text;
+
+                if (username == receiver_name && roomName != room_id) {
+                    console.log("有未读消息！");
+                    console.log(text);
+
+                    let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                    console.log(contact_list);
+                    for (let i = 0; i < contact_list.length; i++) {
+                        //console.log(contact_list[i].id);
+                        let contact = contact_list[i];
+                        let contact_name = contact.id.slice(8);
+                        console.log(contact_name);
+                        if (online_user_list.includes(contact_name)) {
+                            let text = contact.getElementsByClassName('text-truncate')[1];
+                            console.log(text);
+                            text.innerHTML = "[在线]" + "有未读消息";
+                        } else {
+                            let text = contact.getElementsByClassName('text-truncate')[1];
+                            console.log(text);
+                            text.innerHTML = "[离线]" + "有未读消息";
+                        }
+                    }
+
+                    let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                    console.log(chat_list);
+                    for (let i = 0; i < chat_list.length; i++) {
+                        let chat = chat_list[i];
+                        let chat_name = chat.id.slice(5);
+                        console.log(chat_name);
+                        if (online_user_list.includes(chat_name)) {
+                            let text = chat.getElementsByClassName('text-truncate')[1];
+                            console.log(text);
+                            text.innerHTML = "[在线]" + "有未读消息";
+                        } else {
+                            let text = chat.getElementsByClassName('text-truncate')[1];
+                            console.log(text);
+                            text.innerHTML = "[离线]" + "有未读消息";
+                        }
+                    }
+                }
+            }
+        }
+
+        indexSocket.onclose = function (e) {
+            console.error("Index socket closed unexpectedly.");
+        }
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            let messageInputDom = document.querySelector('#chat-message-input');
+            let text = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                code: 200,
+                username: username,
+                text: text
+            }));
+
+            messageInputDom.value = '';
+
+            indexSocket.send(JSON.stringify({
+                code: 200,
+                sender_name: username,
+                room_id: roomName,
+                text: text
+            }))
+
+        };
+
+        document.getElementById('search-history').onclick = function (e) {
+            console.log(666)
+            chatSocket.send(JSON.stringify({
+                code: 666,
+                applicant: username,
+            }));
+        }
+
+    </script>
+{% endblock %}

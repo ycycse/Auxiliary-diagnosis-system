@@ -1,0 +1,71 @@
+{% load static %}
+
+<!--本页面为首页的初始界面-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link href="{% static 'other/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'other/css/style.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content text-center p-md">
+
+                            <h2><span class="text-navy">Covid-19 线上辅助诊断系统</span>
+                            为您提供贴心的CT图像辅助诊断服务 <br/>祝您健康</h2>
+
+                            <a>可点击此处查看使用说明</a>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content text-center p-md">
+
+                            <h3 class="m-b-xxs">深度学习处理CT图像</h3>
+                            <p>Avalible configure options</p>
+                            <span class="simple_tag">患病概率预测</span>
+                            <span class="simple_tag">病灶区域的标识</span>
+                            <span class="simple_tag">患者分类</span>
+                            <span class="simple_tag">辅助诊断</span>
+                            <div class="m-t-md">
+                                <div class="p-lg ">
+<!--                                <a href="dashboard_4.html"><img class="img-responsive img-shadow" src="{% static 'img/main/lung.jpg' %}" vertical-align="middle" alt=""></a>-->
+                                    <a href="{% url 'diagnosis:pic_upload' %}">点击使用</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content text-center p-md">
+
+                            <h3 class="m-b-xxs">流行范围可视化</h3>
+                            <p>Avalible configure options</p>
+                            <span class="simple_tag">更新新病例轨迹</span>
+                            <span class="simple_tag">结合原有大数据</span>
+                            <span class="simple_tag">辅助疫情防控</span>
+                            <div class="m-t-md">
+                                <div class="p-lg">
+<!--                                <a href="dashboard_4_1.html"><img class="img-responsive img-shadow" src="{% static 'img/main/lung.jpg' %}" vertical-align="middle" alt=""></a>-->
+                                    <a href="{% url 'diagnosis:result_list' %}">点击使用</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>

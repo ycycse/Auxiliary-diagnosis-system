@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>CT检测结果</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+        <!--图标库-->
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'>
+
+        <!--核心样式-->
+        <link rel="stylesheet" href="{% static 'other/css/result/style.css'%}">
+        <link rel="stylesheet" href="{% static 'layui/css/layui.css'%}">
+    </head>
+    <body>
+
+        {% for item in items %}
+            <div>
+            {{ item. }}
+            </div>
+        {% endfor %}
+
+        <div class='app'>
+            <main class='project'>
+              <div class='project-info'>
+                <h1>CT检测结果</h1>
+              </div>
+              <div class='project-tasks'>
+                <div class='project-column'>
+                  <div class='project-column-heading'>
+                    <h2 class='project-column-heading__title'>今日检测结果</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
+                  </div>
+                  <div class='task' draggable='true'>
+                    <div class='task__tags'><span class='task__tag task__tag--copyright'>阳性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                    <p>患者编号：2012</p>
+                    <div class='task__stats'>
+                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
+                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    </div>
+                  </div>
+
+                <div class='task' draggable='true'>
+                    <div class='task__tags'><span class='task__tag task__tag--copyright'>阳性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                    <p>患者编号：3412</p>
+                    <div class='task__stats'>
+                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 22</time></span>
+                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    </div>
+                </div>
+
+            </div>
+
+                <div class='project-column'><div class='project-column-heading'>
+                    <h2 class='project-column-heading__title'>历史检测记录</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
+                </div>
+
+                  <div class='task' draggable='true'>
+                    <div class='task__tags'><span class='task__tag task__tag--illustration'>阴性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                    <p>患者编号：2572</p>
+                    <div class='task__stats'>
+                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
+                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    </div>
+                  </div>
+
+                  <div class='task' draggable='true'>
+                    <div class='task__tags'><span class='task__tag task__tag--illustration'>阴性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                    <p>患者编号：4389</p>
+                    <div class='task__stats'>
+                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
+                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class='project-column'><div class='project-column-heading'>
+                    <h2 class='project-column-heading__title'>待复查</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
+                </div>
+
+                  <div class='task' draggable='true'>
+                    <div class='task__tags'><span class='task__tag task__tag--illustration'>阴性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                    <p>患者编号：1001</p>
+                    <div class='task__stats'>
+                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
+                      <!-- <span><i class="fas fa-comment"></i>4</span>
+                      <span><i class="fas fa-paperclip"></i>0</span>
+                      <span class='task__owner'></span> -->
+<!--                        <a href="{% url 'diagnosis:result_detail' %}">点击查看详细信息</a>-->
+                        &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+        </div>
+        <!--图标库-->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js'></script>
+
+        <script src="{% static 'other/js/result/script.js' %}"></script>
+    </body>
+</html>

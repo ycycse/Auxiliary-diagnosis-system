@@ -1,0 +1,355 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理-登陆</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" media="all">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            background: #1a1e21;
+        }
+
+        body:after {
+            content: '';
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-filter: blur(3px);
+            -moz-filter: blur(3px);
+            -o-filter: blur(3px);
+            -ms-filter: blur(3px);
+            filter: blur(3px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        .layui-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        .admin-login-background {
+            width: 360px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            margin-left: -180px;
+            margin-top: -100px;
+        }
+
+        .logo-title {
+            text-align: center;
+            letter-spacing: 2px;
+            padding: 14px 0;
+        }
+
+        .logo-title h1 {
+            color: #0dcaf0;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .login-form {
+            position: relative;
+            top: -35%;
+            background-color: #fff;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            padding: 14px 20px;
+            box-shadow: 0 0 8px #eeeeee;
+        }
+
+        .layui-form-item {
+            position: relative;
+        }
+
+        .layui-form-item label {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .login-form .layui-form-item input {
+            padding-left: 36px;
+        }
+
+        .captcha {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .captcha-img {
+            display: inline-block;
+            width: 34%;
+            float: right;
+        }
+
+        .captcha-img img {
+            height: 34px;
+            border: 1px solid #e6e6e6;
+            height: 36px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-container">
+    <div class="admin-login-background">
+        <div class="layui-form login-form">
+            <form class="layui-form" action="{% url 'login:register' %}" method="post">
+                {% csrf_token %} <!--随机码-->
+
+                <div class="layui-form-item logo-title">
+                    <h1>诊断辅助系统</h1>
+                </div>
+
+                <!--身份-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-friends" for="identity"></label>
+                    <div class="layui-input-block">
+                        <select name="identity" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">医生</option>
+                            <option value="1">患者</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!--用户名-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-username" for="username"></label>
+                    <input type="text" name="username" lay-verify="required|username" placeholder="请输入用户名"
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <!--昵称-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-user" for="nickname"></label>
+                    <input type="text" name="nickname" lay-verify="required" placeholder="请输入昵称"
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <!--密码-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-password" for="password"></label>
+                    <input type="password" name="password" lay-verify="required|password" placeholder="请输入密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <!--确认密码-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-key" for="password2"></label>
+                    <input type="password" name="password2" lay-verify="required|password|password2" placeholder="请再次输入密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <!--电话-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-cellphone" for="phone"></label>
+                    <input type="text" name="phone" lay-verify="required|phone|phonecount" placeholder="请输入电话号码"
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <!--邮箱-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-email" for="email"></label>
+                    <input type="text" name="email" lay-verify="required|email" placeholder="请输入邮箱"
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <!--图形验证码-->
+                {#                <div class="layui-form-item">#}
+                {#                    <label class="layui-icon layui-icon-vercode" for="captcha"></label>#}
+                {#                    <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码"#}
+                {#                           autocomplete="off" class="layui-input verification captcha" value="xszg">#}
+                {#                    <div class="captcha-img">#}
+                {#                        <img id="captchaPic" src="../images/captcha.jpg">#}
+                {#                    </div>#}
+                {#                </div>#}
+
+                <div class="layui-form-item" style="text-align: center">
+                    <button class="layui-btn layui-btn-normal layui-inline" lay-submit=""
+                            lay-filter="*">注 册
+                    </button>
+                    <button class="layui-btn layui-btn-normal layui-inline"
+                            lay-filter="register"><a href="{% url 'login:login' %}">登 入</a>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'login/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'layui/layui.js' %}" charset="utf-8"></script>
+<script src="{% static 'login/lib/jq-module/jquery.particleground.min.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['layer', 'form', 'upload'], function (data) {
+        var layer = layui.layer;
+        var form = layui.form;
+        var upload = layui.upload;
+        var $ = layui.jquery;
+
+        {% if register_errmsg %}
+            layer.msg('{{ register_errmsg }}');
+        {% endif %}
+
+        form.render();//表单渲染
+
+        $(document).ready(function () {
+            $('.layui-container').particleground({
+                dotColor: '#7ec7fd',
+                lineColor: '#7ec7fd'
+            });
+        });
+        //表单验证
+        form.verify({
+            /*用户名校验*/
+            username: function (value, item) { //value：表单的值、item：表单的DOM对象
+                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '用户名不能有特殊字符';
+                }
+                if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+                if (/^\d+\d+\d$/.test(value)) {
+                    return '用户名不能全为数字';
+                }
+
+                /*判断用户名是否重复注册*/
+                let flag = false
+                $.ajax({
+                    type: 'get',
+                    url: "usernames/" + value + "/count/",
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        var count = data.count;
+
+                        if (count > 0) {
+                            flag = true
+                        }
+                    },
+                    error: function (data) {
+                        alert("无法连接后台");
+                    }
+                });
+                if (flag) {
+                    return "该用户已存在"
+                }
+
+            },
+            /*密码校验*/
+            password: function (value, item) {
+                /*var username = $('input[name="username"]').val();
+                var password = $('input[name="password"]').val();*/
+
+                if (!/^[\S]{6,12}$/.test(value)) {
+                    return '密码必须6到12位，且不能出现空格';
+                }
+
+                /*
+                var infos = '';
+                $.ajax({
+                    type: 'post',
+
+
+
+
+                {#url: '{{ path }}/verify_account',#}
+                    async: false,
+                    data: {
+                        username: username,
+                        password: password,
+
+
+
+
+                {#csrfmiddlewaretoken: '{{ csrf_token  }}'#}
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        infos = data.info;
+                    }
+                });
+                if (infos === 'false') {
+                    return '账号密码错误';
+                }
+                */
+            },
+            /*确认密码校验*/
+            password2: function (value, item) {
+                var password1 = $('input[name=password]').val();
+                var password2 = $('input[name=password2]').val();
+
+                if (password2 != password1) {
+                    return '两次输入密码不一致';
+                }
+
+            },
+            {#手机号码重复验证#}
+            phonecount: function (value, item) {
+                let flag = false
+                $.ajax({
+                    type: 'get',
+                    url: 'phones/' + value + '/count/',
+                    async: false,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        count = data.count
+
+                        if (count > 0) {
+                            flag = true
+                        }
+                    },
+                    error: function (data) {
+                        alert('无法连接后台或电话格式不正确')
+                    }
+                })
+                if (flag) {
+                    return "改手机号码已注册"
+                }
+            }
+        });
+        //表单提交
+        form.on('submit(*)', function (data) {
+            var $ = layui.jquery;
+            return true;
+        });
+    })
+
+</script>
+</body>
+</html>

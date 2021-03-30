@@ -1,0 +1,230 @@
+{% extends 'chat/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    聊天首页
+{% endblock %}
+
+{% block main %}
+    <div class="main px-xl-5 px-lg-4 px-3">
+
+        <div class="chat-body">
+
+            <div
+                    class="chat d-flex justify-content-center align-items-center h-100 text-center py-xl-4 py-md-3 py-2">
+                <div class="container-xxl">
+                    <div class="avatar lg avatar-bg me-auto ms-auto mb-5">
+                        <img class="avatar lg rounded-circle border"
+                             src="{% static 'web_im/dist/assets/images/user.png' %}" alt=""/>
+                        <span class="a-bg-1"></span>
+                        <span class="a-bg-2"></span>
+                    </div>
+                    <h5 class="font-weight-bold">您好</h5>
+                    <p>请点击左上角按钮以寻找咨询对象</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        function getCookie(cookiename) {
+            var name = cookiename + "=";
+            var cs = document.cookie.split(';');
+            for (var i = 0; i < cs.length; i++) {
+                var c = cs[i].trim();
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+        }
+
+        var username = getCookie('username');
+        var online_user_list = new Array();
+
+        var indexSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/index/'
+        );
+
+        indexSocket.onopen = function (e) {
+            console.log("Index socket连接成功！");
+            indexSocket.send(JSON.stringify({
+                code: 100,
+                username: username
+            }))
+        };
+
+        indexSocket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            var message = data['message'];
+            let code = message.code;
+
+            if (code == 100) {
+                online_user_list = message.online_user_list;
+                let unread_sender_list = message.unread_sender_list;
+                let newComer = message.newComer;
+                console.log(online_user_list);
+                console.log(newComer + "上线了");
+                console.log(unread_sender_list);
+
+                let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                console.log(contact_list);
+                for (let i = 0; i < contact_list.length; i++) {
+                    //console.log(contact_list[i].id);
+                    let contact = contact_list[i];
+                    let contact_name = contact.id.slice(8);
+                    console.log(contact_name);
+                    if (online_user_list.includes(contact_name)) {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                        if (unread_sender_list.includes(contact_name)) {
+                            text.innerHTML = "[在线]有未读消息";
+                        }
+
+                    } else {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                        if (unread_sender_list.includes(contact_name)) {
+                            text.innerHTML = "[离线]有未读消息";
+                        }
+                    }
+                }
+
+                let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                console.log(chat_list);
+                for (let i = 0; i < chat_list.length; i++) {
+                    let chat = chat_list[i];
+                    let chat_name = chat.id.slice(5);
+                    console.log(chat_name);
+                    if (online_user_list.includes(chat_name)) {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                        if (unread_sender_list.includes(chat_name)) {
+                            text.innerHTML = "[在线]+有未读消息";
+                        }
+                    } else {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                        if (unread_sender_list.includes(chat_name)) {
+                            text.innerHTML = "[离线]+有未读消息";
+                        }
+                    }
+                }
+
+            }
+
+            if (code == 888) {
+                online_user_list = message.online_user_list;
+                let leave_user = message.leave_user;
+                console.log(online_user_list);
+                console.log(leave_user + "离开了");
+
+                let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                console.log(contact_list);
+                for (let i = 0; i < contact_list.length; i++) {
+                    //console.log(contact_list[i].id);
+                    let contact = contact_list[i];
+                    let contact_name = contact.id.slice(8);
+                    console.log(contact_name);
+                    if (online_user_list.includes(contact_name)) {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                    } else {
+                        let text = contact.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                    }
+                }
+
+                let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                console.log(chat_list);
+                for (let i = 0; i < chat_list.length; i++) {
+                    let chat = chat_list[i];
+                    let chat_name = chat.id.slice(5);
+                    console.log(chat_name);
+                    if (online_user_list.includes(chat_name)) {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[在线]";
+                    } else {
+                        let text = chat.getElementsByClassName('text-truncate')[1];
+                        console.log(text);
+                        text.innerHTML = "[离线]";
+                    }
+                }
+            }
+
+            if (code == 200) {
+                let receiver_name = message.receiver_name;
+                let sender_name = message.sender_name;
+                let room_id = message.room_id;
+                let text = message.text;
+
+                if (username == receiver_name) {
+                    console.log("有未读消息！");
+                    console.log(text);
+
+                    let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                    console.log(contact_list);
+                    for (let i = 0; i < contact_list.length; i++) {
+                        //console.log(contact_list[i].id);
+                        let contact = contact_list[i];
+                        let contact_name = contact.id.slice(8);
+                        console.log(contact_name);
+                        if (contact_name != sender_name) {
+                            continue;
+                        } else {
+                            if (online_user_list.includes(contact_name)) {
+                                let text = contact.getElementsByClassName('text-truncate')[1];
+                                console.log(text);
+                                text.innerHTML = "[在线]" + "有未读消息";
+                            } else {
+                                let text = contact.getElementsByClassName('text-truncate')[1];
+                                console.log(text);
+                                text.innerHTML = "[离线]" + "有未读消息";
+                            }
+                            break;
+                        }
+
+                    }
+
+                    let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                    console.log(chat_list);
+                    for (let i = 0; i < chat_list.length; i++) {
+                        let chat = chat_list[i];
+                        let chat_name = chat.id.slice(5);
+                        console.log(chat_name);
+                        if (chat_name != sender_name) {
+                            continue;
+                        } else {
+                            if (online_user_list.includes(chat_name)) {
+                                let text = chat.getElementsByClassName('text-truncate')[1];
+                                console.log(text);
+                                text.innerHTML = "[在线]" + "有未读消息";
+                            } else {
+                                let text = chat.getElementsByClassName('text-truncate')[1];
+                                console.log(text);
+                                text.innerHTML = "[离线]" + "有未读消息";
+                            }
+                            break;
+                        }
+
+                    }
+                }
+            }
+        };
+
+        indexSocket.onclose = function (e) {
+            console.error('index socket closed unexpectedly.');
+        }
+
+
+    </script>
+{% endblock %}
