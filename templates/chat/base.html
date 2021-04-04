@@ -14,7 +14,7 @@
       href="{% static 'web_im/dist/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}">
 
 <link rel="stylesheet" href="{% static 'web_im/dist/assets/css/style.min.css' %}">
-<body>
+<body class="open-sidebar-menu">
 <div id="layout" class="theme-cyan">
 
     <div class="navigation navbar justify-content-center py-xl-4 py-md-3 py-0 px-3">
@@ -110,6 +110,7 @@
     <div class="sidebar border-end py-xl-4 py-3 px-xl-4 px-3">
         <div class="tab-content">
 
+            <!--最近聊天-->
             <div class="tab-pane fade" id="nav-tab-chat" role="tabpanel">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -158,7 +159,7 @@
                                         <div class="avatar me-3">
                                             <span class="status rounded-circle"></span>
                                             <img class="avatar rounded-circle"
-                                                 src="{% static 'web_im/dist/assets/images/xs/avatar5.jpg' %}"
+                                                 src="{% static 'web_im/dist/assets/images/user.png' %}"
                                                  alt="avatar">
                                         </div>
                                         <div class="media-body overflow-hidden">
@@ -180,6 +181,7 @@
                 </ul>
             </div>
 
+            <!--联系人-->
             <div class="tab-pane fade show active" id="nav-tab-contact" role="tabpanel">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -229,7 +231,7 @@
                                         <div class="media">
                                             <div class="avatar me-3">
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/xs/avatar1.jpg' %}"
+                                                     src="{% static 'web_im/dist/assets/images/user.png' %}"
                                                      alt="avatar">
                                             </div>
                                             <div class="media-body overflow-hidden">
@@ -278,7 +280,7 @@
                                         <div class="media">
                                             <div class="avatar me-3">
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/xs/avatar1.jpg' %}"
+                                                     src="{% static 'web_im/dist/assets/images/user.png' %}"
                                                      alt="avatar">
                                             </div>
                                             <div class="media-body overflow-hidden">
