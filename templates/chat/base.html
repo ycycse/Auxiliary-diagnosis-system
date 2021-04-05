@@ -158,17 +158,25 @@
                                     <div class="media">
                                         <div class="avatar me-3">
                                             <span class="status rounded-circle"></span>
-                                            <img class="avatar rounded-circle"
-                                                 src="{% static 'web_im/dist/assets/images/user.png' %}"
-                                                 alt="avatar">
+                                            {% if to_user.identity == 0 %}
+                                                <img class="avatar rounded-circle"
+                                                     src="{% static 'web_im/dist/assets/images/doctor.png' %}"
+                                                     alt="avatar">
+                                            {% else %}
+                                                <img class="avatar rounded-circle"
+                                                     src="{% static 'web_im/dist/assets/images/user.png' %}"
+                                                     alt="avatar">
+
+                                            {% endif %}
+
+
                                         </div>
                                         <div class="media-body overflow-hidden">
                                             <div class="d-flex align-items-center mb-1">
                                                 <h6 class="text-truncate mb-0 me-auto">{{ to_user.nickname }}</h6>
                                                 <p class="small text-muted text-nowrap ms-4 mb-0">11:08 am</p>
                                             </div>
-                                            <div class="text-truncate">It is a long established fact that a reader
-                                                w...
+                                            <div class="text-truncate">
                                             </div>
                                         </div>
                                     </div>
@@ -231,7 +239,7 @@
                                         <div class="media">
                                             <div class="avatar me-3">
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/user.png' %}"
+                                                     src="{% static 'web_im/dist/assets/images/doctor.png' %}"
                                                      alt="avatar">
                                             </div>
                                             <div class="media-body overflow-hidden">
@@ -239,7 +247,6 @@
                                                     <h6 class="text-truncate mb-0 me-auto">{{ friend.nickname }}</h6>
                                                 </div>
                                                 <div class="text-truncate">
-                                                    last seen 2 hours ago
                                                 </div>
                                             </div>
                                         </div>
@@ -288,7 +295,6 @@
                                                     <h6 class="text-truncate mb-0 me-auto">{{ friend.nickname }}</h6>
                                                 </div>
                                                 <div class="text-truncate">
-                                                    last seen 2 hours ago
                                                 </div>
                                             </div>
                                         </div>

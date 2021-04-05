@@ -19,9 +19,18 @@
                             <div class="media">
                                 <div class="me-3 show-user-detail">
                                     <span class="status rounded-circle"></span>
-                                    <img class="avatar rounded-circle"
-                                         src="{% static 'web_im/dist/assets/images/xs/avatar5.jpg' %}"
-                                         alt="avatar">
+
+                                    {% if current_to_user.identity == 0 %}
+                                        <img class="avatar rounded-circle"
+                                             src="{% static 'web_im/dist/assets/images/doctor.png' %}"
+                                             alt="avatar">
+                                    {% else %}
+                                        <img class="avatar rounded-circle"
+                                             src="{% static 'web_im/dist/assets/images/user.png' %}"
+                                             alt="avatar">
+
+                                    {% endif %}
+
                                 </div>
                                 <div class="media-body overflow-hidden">
                                     <div class="d-flex align-items-center mb-1">
@@ -79,7 +88,7 @@
                             <div class="input-group align-items-center">
 
                                 <input type="text" class="form-control border-0 pl-0" id="chat-message-input"
-                                       placeholder="Type your message...">
+                                       placeholder="请输入消息...">
 
                                 <div class="input-group-append d-none d-sm-block">
 											<span class="input-group-text border-0">

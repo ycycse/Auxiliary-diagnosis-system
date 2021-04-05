@@ -22,7 +22,6 @@ def room(request, room_name):
 
     current_to_user = chat_room.get_another_member(username)
 
-
     user_list = User.objects.all()
     # print(user_list)
     friend_list = []
@@ -106,6 +105,7 @@ class IndexView(View):
         context = {
             'friend_list': friend_list,
             'to_user_list': to_user_list,
+            'self': from_user,
             # 'unread_sender_list': unread_sender_list,
         }
 
