@@ -84,10 +84,12 @@
         </a>
 
         <div class="nav flex-md-column nav-pills flex-grow-1" role="tablist" aria-orientation="vertical">
+            <!--
             <a class="mb-xl-3 mb-md-2 nav-link" data-toggle="pill" href="javascript:void(0);" role="tab">
                 <img src="{% static 'web_im/dist/assets/images/user.png' %}" class="avatar sm rounded-circle"
                      alt="user avatar"/>
             </a>
+            -->
             <a class="mb-xl-3 mb-md-2 nav-link" data-toggle="pill" href="#nav-tab-chat" role="tab"><i
                     class="zmdi zmdi-comment-alt"></i></a>
 
@@ -160,11 +162,11 @@
                                             <span class="status rounded-circle"></span>
                                             {% if to_user.identity == 0 %}
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/doctor.png' %}"
+                                                     src="{% static 'web_im/dist/assets/images/doctor.jpg' %}"
                                                      alt="avatar">
                                             {% else %}
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/user.png' %}"
+                                                     src="{% static 'web_im/dist/assets/images/patient.jpg' %}"
                                                      alt="avatar">
 
                                             {% endif %}
@@ -239,7 +241,7 @@
                                         <div class="media">
                                             <div class="avatar me-3">
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/doctor.png' %}"
+                                                     src="{% static 'web_im/dist/assets/images/doctor.jpg' %}"
                                                      alt="avatar">
                                             </div>
                                             <div class="media-body overflow-hidden">
@@ -287,7 +289,7 @@
                                         <div class="media">
                                             <div class="avatar me-3">
                                                 <img class="avatar rounded-circle"
-                                                     src="{% static 'web_im/dist/assets/images/user.png' %}"
+                                                     src="{% static 'web_im/dist/assets/images/patient.jpg' %}"
                                                      alt="avatar">
                                             </div>
                                             <div class="media-body overflow-hidden">

@@ -42,11 +42,13 @@
                         </div>
                     </div>
                     <div class="ibox-content">
+                        <!--图片上传表单-->
                         <form id="my-awesome-dropzone" class="dropzone" method="post" action="{% url 'diagnosis:pic_process' %}">
                             {% csrf_token %}
                             <div class="dropzone-previews">点击或拖拽上传</div>
                             <button id = "submit" class="btn btn-primary pull-right">提交检测</button>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -104,7 +106,7 @@
 <!--                parallelUploads: 100,-->
 <!--                maxFiles: 1,-->
 
-<!--                // Dropzone settings-->
+<!--                Dropzone settings-->
 <!--                init: function() {-->
 <!--                    var myDropzone = this;-->
 

@@ -59,7 +59,7 @@ class PicProcessView(View):
             file_url = os.path.join(upload_url, finally_name)
             # 对类别进行识别
             context['judge'] = recognize(os.path.join(upload_url, finally_name))
-            # 对图片进行分割
+            # 对图片进行分割并返回分割图片的路径
             context['append_img'] = inference(os.path.join(upload_url, finally_name))
 
             # 返回文件的URl
