@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from diagnosis.models import DetectionResult
+
 # Create your views here.
 
 # 返回在模板中的参数
@@ -36,6 +38,7 @@ class PicProcessView(View):
         curttime = time.strftime("%Y-%m-%d")
         # 规定上传目录
         upload_url = os.path.join(settings.MEDIA_ROOT, 'attachment', curttime)
+        print("--------------------"+upload_url)
         # 判断文件夹是否存在
         folder = os.path.exists(upload_url)
         if not folder:
@@ -43,27 +46,36 @@ class PicProcessView(View):
             print("创建文件夹")
         if file:
             file_name = file.name
+            # 表示上传文件的后缀
+            etx = ""
             # 判断文件是是否重名，懒得写随机函数，重名了，文件名加时间
             if os.path.exists(os.path.join(upload_url, file_name)):
                 name, etx = os.path.splitext(file_name)
                 addtime = time.strftime("%Y%m%d%H%M%S")
-                finally_name = name + "_" + addtime + etx
+                finally_name = name + "_" + addtime
             else:
                 finally_name = file.name
+
             # 文件分块上传
             upload_file_to = open(os.path.join(upload_url, finally_name), 'wb+')
             for chunk in file.chunks():
                 upload_file_to.write(chunk)
             upload_file_to.close()
 
-            file_url = os.path.join(upload_url, finally_name)
+            # 文件原图的URl
+            file_upload_url = settings.MEDIA_URL + 'attachment/' + curttime + '/' + finally_name + etx
+            # 处理后文件的URL
+            file_processed_url = os.path.join(upload_url, "res_" + finally_name + ".png")
+            print("fuuuuuuuuuuck " + file_upload_url + file_processed_url)
             # 对类别进行识别
             context['judge'] = recognize(os.path.join(upload_url, finally_name))
             # 对图片进行分割并返回分割图片的路径
-            context['append_img'] = inference(os.path.join(upload_url, finally_name))
+            context['append_img'] = inference(os.path.join(upload_url, finally_name), file_processed_url)
 
-            # 返回文件的URl
-            file_upload_url = settings.MEDIA_URL + 'attachment/' + curttime + '/' + finally_name
+            detectionResult = DetectionResult(way='医生上传', result=context['judge'],
+                                              processed_img_path=context['append_img'],
+                                              img_path=file_upload_url, patient_id="1001")
+            detectionResult.save()
             # 构建返回值
             response_data = {
                 'code': 0,

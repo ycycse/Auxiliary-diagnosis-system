@@ -7,7 +7,7 @@ from login.models import User
 
 # Create your models here.
 
-
+ 
 class ChatRoom(models.Model):
     """
     聊天室（仅供双人）
