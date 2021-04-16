@@ -5,5 +5,5 @@ from . import views
 
 app_name = 'epidemic_map'
 urlpatterns = [
-    path('', views.ChinaMapView.as_view(), name='china-map'),
+    path('', views.EpidemicMapView.as_view(), name='epidemic-map'),
 ]
