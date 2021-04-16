@@ -17,12 +17,6 @@
     </head>
     <body>
 
-        {% for item in items %}
-            <div>
-            {{ item. }}
-            </div>
-        {% endfor %}
-
         <div class='app'>
             <main class='project'>
               <div class='project-info'>
@@ -31,68 +25,67 @@
               <div class='project-tasks'>
                 <div class='project-column'>
                   <div class='project-column-heading'>
-                    <h2 class='project-column-heading__title'>今日检测结果</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
+                    <h2 class='project-column-heading__title'>已复查结果</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
                   </div>
-                  <div class='task' draggable='true'>
-                    <div class='task__tags'><span class='task__tag task__tag--copyright'>阳性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
-                    <p>患者编号：2012</p>
-                    <div class='task__stats'>
-                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
-                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    {% for item in checked %}
+                    <div class='task' draggable='true'>
+                        <div class='task__tags'><span class='task__tag task__tag--illustration'>{{item.result}}</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                        <p>患者编号：{{item.patient_id}}</p>
+                        <div class='task__stats'>
+                            <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>
+                                {% if item.checked == 1 %}
+                                    已复查
+                                {% else %}
+                                    未复查
+                                {% endif %}
+                            </time></span>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp<a href="/diagnosis/result_detail/{{item.index}}/"><button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button></a>
+                        </div>
                     </div>
-                  </div>
-
-                <div class='task' draggable='true'>
-                    <div class='task__tags'><span class='task__tag task__tag--copyright'>阳性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
-                    <p>患者编号：3412</p>
-                    <div class='task__stats'>
-                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 22</time></span>
-                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
-                    </div>
-                </div>
-
+                    {% endfor %}
             </div>
 
-                <div class='project-column'><div class='project-column-heading'>
-                    <h2 class='project-column-heading__title'>历史检测记录</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
-                </div>
-
-                  <div class='task' draggable='true'>
-                    <div class='task__tags'><span class='task__tag task__tag--illustration'>阴性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
-                    <p>患者编号：2572</p>
-                    <div class='task__stats'>
-                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
-                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                <div class='project-column'>
+                    <div class='project-column-heading'>
+                        <h2 class='project-column-heading__title'>历史检测记录</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
                     </div>
-                  </div>
-
-                  <div class='task' draggable='true'>
-                    <div class='task__tags'><span class='task__tag task__tag--illustration'>阴性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
-                    <p>患者编号：4389</p>
-                    <div class='task__stats'>
-                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
-                          &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    {% for item in temp %}
+                    <div class='task' draggable='true'>
+                        <div class='task__tags'><span class='task__tag task__tag--illustration'>{{item.result}}</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                        <p>患者编号：{{item.patient_id}}</p>
+                        <div class='task__stats'>
+                            <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>
+                                {% if item.checked == 1 %}
+                                    已复查
+                                {% else %}
+                                    未复查
+                                {% endif %}
+                            </time></span>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp<a href="/diagnosis/result_detail/{{item.index}}/"><button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button></a>
+                        </div>
                     </div>
-                  </div>
-
+                    {% endfor %}
                 </div>
 
                 <div class='project-column'><div class='project-column-heading'>
                     <h2 class='project-column-heading__title'>待复查</h2><button class='project-column-heading__options'><i class="fas fa-ellipsis-h"></i></button>
                 </div>
-
-                  <div class='task' draggable='true'>
-                    <div class='task__tags'><span class='task__tag task__tag--illustration'>阴性</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
-                    <p>患者编号：1001</p>
-                    <div class='task__stats'>
-                      <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>Nov 24</time></span>
-                      <!-- <span><i class="fas fa-comment"></i>4</span>
-                      <span><i class="fas fa-paperclip"></i>0</span>
-                      <span class='task__owner'></span> -->
-<!--                        <a href="{% url 'diagnosis:result_detail' %}">点击查看详细信息</a>-->
-                        &nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button>
+                    {% for item in unchecked %}
+                    <div class='task' draggable='true'>
+                        <div class='task__tags'><span class='task__tag task__tag--illustration'>{{item.result}}</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
+                        <p>患者编号：{{item.patient_id}}</p>
+                        <div class='task__stats'>
+                            <span><time datetime="2021-11-24T20:00:00"><i class="fas fa-flag"></i>
+                                {% if item.checked == 1 %}
+                                    已复查
+                                {% else %}
+                                    未复查
+                                {% endif %}
+                            </time></span>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp<a href="/diagnosis/result_detail/{{item.index}}/"><button type="button" class="layui-btn layui-btn-primary layui-btn-xs">详细信息</button></a>
+                        </div>
                     </div>
-                  </div>
+                    {% endfor %}
                 </div>
               </div>
             </main>

@@ -7,6 +7,7 @@
     <link href="{% static 'layui/css/layui.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'other/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'other/css/result/detail.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'layui/css/modules/layer/default/layer.css' %}" rel="stylesheet" type="text/css" />
     <title>Vienna</title>
 </head>
 
@@ -39,19 +40,21 @@
            <div class="col-xs-12 col-md-8 no-padding">
                 <div class="gallery-section wpc-h full-page">
                     <div class="s-back-switch slide-wrap wpc-h">
-                        <img src="{{ MEDIA_URL }}{{ append_img }}" alt="gallery" class="s-img-switch">
+                        <img id = "pic" style="display:block" src="{{ MEDIA_URL }}{{ temp.img_path }}" alt="gallery" width="666px" height="auto">
+<!--                        <img id = "pic_res" style="display:block" src="{{ MEDIA_URL }}{{ temp.processed_img_path }}" alt="gallery" class="s-img-switch">-->
+                        <img id = "pic_res" style="display:none" src="{{ MEDIA_URL }}{{ temp.processed_img_path }}" alt="gallery" width="666px" height="auto">
                     </div>
                 </div>
            </div>
            <div class="col-md-4">
                <aside class="wpc-sidebar classic no-opacity">
                 <i class="fa fa-times"></i>
-                  <div class="heading marg-lg-b50">{{ judge }}</div>
+                  <div class="heading marg-lg-b50">{{ temp.result }}</div>
                   <div class="info">
                       该检测结果仅为模型处理后所得结果 <br class="visible-lg-large">
                       <div class="marg-lg-t20 info-group">
-                          <p><span class="detail-info">患者编号:1002</span></p>
-                          <p><span class="detail-info">检测类型:医生上传</span></p>
+                          <p><span class="detail-info">患者编号:{{temp.patient_id}}</span></p>
+                          <p><span class="detail-info">检测类型:{{temp.way}}</span></p>
                           <p><span class="detail-info">检测时间:2020/1/22</span></p>
                       </div>
                   </div>
@@ -60,7 +63,8 @@
                       <a href="" class="slide-next slide"><i class="fa fa-angle-right"></i></a>
                   </div>
                    <br><br><br>
-                    <button type="button" class="layui-btn layui-btn-radius">分割图像</button>
+                    <button id = "convert_button" type="button" class="layui-btn layui-btn-radius">分割图像</button>
+                    <button id = "check_button" type="button" class="layui-btn layui-btn-radius">复查</button>
                </aside>
            </div>
        </div>
@@ -80,6 +84,23 @@
 
     <script src="{% static 'other/js/jquery-2.2.3.min.js' %}"></script>
     <script src="{% static 'other/js/main.js' %}"></script>
+    <script src="{% static 'layui/lay/modules/layer.js' %}"></script>
+    <script>
+        $("#convert_button").click(function(){
+                   $("#pic").toggle();
+                   $("#pic_res").toggle();
+            }
+        );
+        $("#check_button").click(function(){
+            layer.confirm('请输入你的复查结果', {
+                  btn: ['阳性','阴性'] //按钮
+                }, function(){
+                  location.href = "/diagnosis/update_result/1/阳性/{{temp.index}}/"
+                },function(){
+                  location.href = "/diagnosis/update_result/1/阴性/{{temp.index}}/"
+                });
+        })
+    </script>
 
 </body>
 

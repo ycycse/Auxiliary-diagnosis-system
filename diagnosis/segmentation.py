@@ -70,12 +70,10 @@ def inference(image_root, processed_path):
     layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
     layer.paste(icon, (0, 0))
     out = Image.composite(layer, img, layer)
-    print(processed_path)
+
     out.save(processed_path)
     print('Segmentation Finished!')
     res = processed_path.split("media")
-    print()
-    print(res[1])
     # print(os.path.join(settings.MEDIA_ROOT, res[1]).replace('\\', '/'))
     return res[1].replace('\\', '/')
 

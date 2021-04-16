@@ -12,6 +12,7 @@ urlpatterns = [
     path('result/', views.ResultView.as_view(), name='result'),
     path('main_layout/', views.MainLayoutView.as_view(), name='main_layout'),
     path('result_list/', views.ResultListView.as_view(), name='result_list'),
-    path('result_detail/', views.ResultDetailView.as_view(), name='result_detail'),
-    path('append_result/<img_url>', views.PicProcessView.getPicture)
+    path('result_detail/<num>/', views.ResultDetailView.as_view(), name='detail'),
+    path('append_result/<img_url>/', views.PicProcessView.getPicture),
+    path('update_result/<checked>/<result>/<idx>/', views.UpdateResultView.as_view())
 ]
