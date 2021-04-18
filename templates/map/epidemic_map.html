@@ -76,6 +76,15 @@
 
             lines = lines.concat(data);
 
+            //处理得到点数组
+            let points = new Array();
+            for (let i = 0; i < lines.length; i++) {
+                let item = lines[i];
+                points = points.concat(item.coords);
+            }
+
+            console.log(points);
+
             // console.log(lines);
             console.log(lines[0].coords.length)
             myChart.setOption({
@@ -178,21 +187,50 @@
                     }
 
                 },
-                series: [{
-                    type: 'lines',
-                    coordinateSystem: 'bmap',
-                    polyline: true,
-                    data: lines,
-                    silent: true,
-                    lineStyle: {
-                        color: 'red',
-                        // color: 'rgb(200, 35, 45)',
-                        opacity: 0.8,
-                        width: 1
+                series: [
+                    {
+                        type: 'lines',
+                        coordinateSystem: 'bmap',
+                        polyline: true,
+                        data: lines,
+                        silent: true,
+                        lineStyle: {
+                            color: 'red',
+                            // color: 'rgb(200, 35, 45)',
+                            opacity: 0.8,
+                            width: 1
+                        },
+                        progressiveThreshold: 500,
+                        progressive: 200
                     },
-                    progressiveThreshold: 500,
-                    progressive: 200
-                }]
+                    {
+                        type: 'scatter',
+                        coordinateSystem: 'bmap',
+                        polyline: true,
+                        data: points,
+                        symbolSize: 10,
+                        itemStyle: {
+                            normal: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(120, 36, 50, 0.5)',
+                                shadowOffsetY: 5,
+                                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                                    offset: 0,
+                                    color: 'rgb(251, 118, 123)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgb(204, 46, 72)'
+                                }])
+                            }
+                        },
+                        emphasis: {
+                            show: false,
+                            position: 'start',
+                            formatter: '{a}-{b}--{c}'
+                        }
+                    },
+
+                ]
             });
 
 
