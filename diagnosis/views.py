@@ -20,7 +20,10 @@ from diagnosis.models import DetectionResult
 
 # 返回在模板中的参数
 context = {}
-index = 0
+
+
+class Util:
+    index = 0;
 
 
 class PicProcessView(View):
@@ -33,7 +36,6 @@ class PicProcessView(View):
     # 上传图片 分割后处理
     @csrf_exempt
     def post(self, request):
-        global index
         file_url = ""
         file = request.FILES.get('file')  # 获取文件对象，包括文件名文件大小和文件内容
         curttime = time.strftime("%Y-%m-%d")
@@ -49,13 +51,14 @@ class PicProcessView(View):
             file_name = file.name
             # 表示上传文件的后缀
             etx = ""
-            # 判断文件是是否重名，懒得写随机函数，重名了，文件名加时间
+            # 判断文件是是否重名，重名了，文件名加时间
             if os.path.exists(os.path.join(upload_url, file_name)):
                 name, etx = os.path.splitext(file_name)
                 addtime = time.strftime("%Y%m%d%H%M%S")
-                finally_name = name + "_" + addtime
+                finally_name = name + "_" + addtime+etx
             else:
                 finally_name = file.name
+                name, etx = os.path.splitext(file_name)
 
             # 文件分块上传
             upload_file_to = open(os.path.join(upload_url, finally_name), 'wb+')
@@ -64,10 +67,10 @@ class PicProcessView(View):
             upload_file_to.close()
 
             # 文件原图的URl
-            file_upload_url = settings.MEDIA_URL + 'attachment/' + curttime + '/' + finally_name + etx
-            # 用于存储的原图url
-            save_url = '/attachment/' + curttime + '/' + finally_name + etx
-            # 处理后文件的URL
+            file_upload_url = settings.MEDIA_URL + 'attachment/' + curttime + '/' + finally_name
+            # 用于存储在数据库中的原图的url
+            save_url = '/attachment/' + curttime + '/' + finally_name
+            # 处理后图片的URL
             file_processed_url = os.path.join(upload_url, "res_" + finally_name + ".png")
             # 对类别进行识别
             context['judge'] = recognize(os.path.join(upload_url, finally_name))
@@ -78,21 +81,12 @@ class PicProcessView(View):
                                               processed_img_path=context['append_img'],
                                               img_path=save_url, patient_id="1001")
             detectionResult.save()
-            index = detectionResult.index
-            # 构建返回值
-            response_data = {
-                'code': 0,
-                'msg': '',
-                'data': {
-                    'src': file_upload_url,
-                }
-            }
+            Util.index = detectionResult.index
         else:
             print("no file")
         print(context)
         print("finished")
-        print(index)
-        return redirect("/diagnosis/result_detail/" + str(index) + "/")
+        return redirect("/diagnosis/result_detail/" + str(Util.index) + "/")
 
 
 class PicUploadView(LoginRequiredMixin, View):
@@ -128,6 +122,10 @@ class ResultDetailView(View):
         # 从数据库中调取对应编号的患者检测数据 用于展示界面
         print("提取index为" + str(num) + "的患者数据")
         temp = DetectionResult.objects.get(index=num)
+        print("----------------------------------------------")
+        print(temp.img_path)
+        print(temp.processed_img_path)
+        print("----------------------------------------------")
         context['temp'] = temp
         return render(request, 'diagnosis/result_detail.html', context)
 

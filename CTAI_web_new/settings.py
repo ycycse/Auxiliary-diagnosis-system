@@ -107,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'USER': 'root',
-        'PASSWORD': 'admin',
+        'PASSWORD': '2769633',
         'PORT': 3306,
         'HOST': 'localhost',
         'NAME': 'ctweb',
