@@ -11,6 +11,9 @@
     <script src="{% static 'map/lib/bmap.min.js' %}"></script>
     <script src="{% static 'map/lib/jquery-3.5.1.min.js' %}"></script>
 
+    <!--引入layui样式-->
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+
     <style>
         html,
         body {
@@ -52,7 +55,7 @@
 {#    <button id="loc-btn">提交</button>#}
 {#</form>#}
 
-
+<script type="text/javascript" src="{% static 'layui/layui.js' %}"></script>
 <script type="text/javascript">
     var chartDom = document.getElementById('main');
     var myChart = echarts.init(chartDom);
@@ -274,6 +277,50 @@
                 var point = new BMap.Point(X, Y);//var point = new BMap.Point(116.331398,39.897445);
                 bmap.centerAndZoom(point, 12);
             }
+
+            //设置自定义控件
+            function myControl() {
+                //设置默认停靠与偏移量
+                this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+                this.defaultOffset = new BMap.Size(20, 40 + 50 * 3);
+            }
+
+            //将构造函数继承与BMap.Control();
+            myControl.prototype = new BMap.Control();
+
+            myControl.prototype.initialize = function (map) {
+                var i = document.createElement("i");
+                i.style = "font-size: 30px; color: #333333;background:#888888;border-radius:10px";
+                i.className = "layui-icon " + "layui-icon-set";
+
+                //绑定点击事件
+                i.onclick = function (e) {
+                    //console.log(e);
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+
+                        layer.open({
+                            type: 2,
+                            title: '🤠 位置上传',
+                            closeBtn: 1,
+                            resize: false,
+                            scrollbar: false,
+                            area: ['470px', '270px'],
+                            shadeClose: true,
+                            content: "{% url 'epidemic_map:location-upload' %}"
+                        });
+                    });
+                };
+
+                //将dom添加到地图容器中
+                map.getContainer().appendChild(i);
+
+                //将dom元素返回
+                return i;
+             }
+            //添加自定义控件
+            bmap.addControl(new myControl());
+
         }
     })
 

@@ -25,7 +25,7 @@ class EpidemicMapView(View):
     def post(self, request):
 
         # 读取现有轨迹数据
-        track_path = os.path.join(settings.STATICFILES_DIRS[0], 'map','json','pandemic-tracks.json')
+        track_path = os.path.join(settings.STATICFILES_DIRS[0], 'map', 'json', 'pandemic-tracks.json')
         if not os.path.exists(track_path) or not os.path.getsize(track_path):
             tracks = []
         else:
@@ -33,7 +33,7 @@ class EpidemicMapView(View):
                 tracks = json.load(f)
 
         # 读取新用户数据
-        nu_path = os.path.join(settings.STATICFILES_DIRS[0],'map','json','new-users.json')
+        nu_path = os.path.join(settings.STATICFILES_DIRS[0], 'map', 'json', 'new-users.json')
         if not os.path.exists(nu_path) or not os.path.getsize(nu_path):
             new_users = []
         else:
@@ -83,4 +83,11 @@ class EpidemicMapView(View):
 
         return JsonResponse({
             'status': 'OK',
-        });
+        })
+
+
+class LocatinoUploadView(View):
+    """位置上传视图"""
+
+    def get(self, request):
+        return render(request, "map/location_upload.html")
