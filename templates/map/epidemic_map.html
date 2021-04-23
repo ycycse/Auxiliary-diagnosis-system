@@ -56,6 +56,7 @@
 {#</form>#}
 
 <script type="text/javascript" src="{% static 'layui/layui.js' %}"></script>
+{#<script src="{% static 'map/js/selectLocation.js' %}"></script>#}
 <script type="text/javascript">
     var chartDom = document.getElementById('main');
     var myChart = echarts.init(chartDom);
@@ -296,20 +297,15 @@
                 //绑定点击事件
                 i.onclick = function (e) {
                     //console.log(e);
-                    layui.use('layer', function () {
-                        var layer = layui.layer;
+                    let mapUrl = "{% url 'epidemic_map:location-upload' %}";
+                    let winHeight = 800;
+                    let winWidth = 1024;
+                    let winTop = 50;
+                    let winLeft = 100;
 
-                        layer.open({
-                            type: 2,
-                            title: '🤠 位置上传',
-                            closeBtn: 1,
-                            resize: false,
-                            scrollbar: false,
-                            area: ['470px', '270px'],
-                            shadeClose: true,
-                            content: "{% url 'epidemic_map:location-upload' %}"
-                        });
-                    });
+                    window.open(mapUrl, 'selectLocation', 'fullscreen=0,directories=0,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,' +
+                        'height=' + winHeight + ',width=' + winWidth + ',top=' + winTop + ',left=' + winLeft + '');
+
                 };
 
                 //将dom添加到地图容器中
@@ -317,7 +313,7 @@
 
                 //将dom元素返回
                 return i;
-             }
+            }
             //添加自定义控件
             bmap.addControl(new myControl());
 
