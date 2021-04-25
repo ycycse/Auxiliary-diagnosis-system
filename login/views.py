@@ -144,7 +144,10 @@ class IndexView(LoginRequiredMixin, View):
                 'nickname': nickname,
             })
         elif identity == User.PATIENT:
-            return render(request, 'index_patient.html', {
+            # return render(request, 'index_patient.html', {
+            #     'nickname': nickname,
+            # })
+            return render(request, 'index.html', {
                 'nickname': nickname,
             })
         else:

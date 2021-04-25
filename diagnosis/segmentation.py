@@ -21,10 +21,10 @@ def show_label(label, name):
             Mean = np.mean(list(color[:-1]))
             if Mean < 100:
                 color = (255, 97, 0, 0)
-            elif Mean < 200:
-                color = (255, 97, 0, 200)
+            # elif Mean < 200:
+            #     color = (255, 97, 0, 200)
             else:
-                color = (0, 0, 128, 200)
+                color = (25, 25, 112, 150)
             img.putpixel((i, j), color)
 
     img.save(name)
@@ -32,6 +32,7 @@ def show_label(label, name):
 
 
 def inference(image_root, processed_path):
+
     print("----run the segmentation model")
 
     pth_path = 'models/segment/Snapshots/save_weights/Inf-Net/Inf-Net-100.pth'
@@ -57,7 +58,6 @@ def inference(image_root, processed_path):
     lateral_map_5, lateral_map_4, lateral_map_3, lateral_map_2, lateral_edge = model(image)
 
     res = lateral_map_2
-    # res = F.upsample(res, size=(ori_size[1],ori_size[0]), mode='bilinear', align_corners=False)
     res = res.sigmoid().data.cpu().numpy().squeeze()
     res = (res - res.min()) / (res.max() - res.min() + 1e-8)
     name = "test.png"
@@ -74,6 +74,5 @@ def inference(image_root, processed_path):
     out.save(processed_path)
     print('Segmentation Finished!')
     res = processed_path.split("media")
-    # print(os.path.join(settings.MEDIA_ROOT, res[1]).replace('\\', '/'))
     return res[1].replace('\\', '/')
 

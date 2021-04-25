@@ -31,7 +31,7 @@ def recognize(img_root):
 
 
 def predict(img, site, trans):
-    d = ['normal', 'COVID-19']
+    d = ['阴性', '阳性']
     input = trans(img)
     img = input.unsqueeze(0)
 
