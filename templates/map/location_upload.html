@@ -1470,14 +1470,8 @@
             dataType: 'json',
             success: function (data) {
                 console.log(data.status);
-
-                {#layui.use('layer', function () {#}
-                {#    var layer = layui.layer;#}
-                {##}
-                {#    layer.msg('上传成功');#}
-                {# });#}
                 window.opener.selectLocation.callbackFun();
-                window.close();
+                {#window.close();#}
             }
         });
     }

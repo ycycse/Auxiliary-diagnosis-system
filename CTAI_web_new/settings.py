@@ -108,7 +108,7 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'USER': 'root',
         # 'PASSWORD': 'admin',
-        'PASSWORD': '2769633',
+        'PASSWORD': 'admin',
         'PORT': 3306,
         'HOST': 'localhost',
         'NAME': 'ctweb',

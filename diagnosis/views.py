@@ -55,7 +55,7 @@ class PicProcessView(View):
             if os.path.exists(os.path.join(upload_url, file_name)):
                 name, etx = os.path.splitext(file_name)
                 addtime = time.strftime("%Y%m%d%H%M%S")
-                finally_name = name + "_" + addtime+etx
+                finally_name = name + "_" + addtime + etx
             else:
                 finally_name = file.name
                 name, etx = os.path.splitext(file_name)
@@ -77,7 +77,14 @@ class PicProcessView(View):
             # 对图片进行分割并返回分割图片的路径
             context['append_img'] = inference(os.path.join(upload_url, finally_name), file_processed_url)
 
-            detectionResult = DetectionResult(way='医生上传', result=context['judge'],
+            identity = request.session.get('identity')
+            way = ""
+            if identity == 0:
+                way = "医生上传"
+            elif identity == 1:
+                way = "患者上传"
+
+            detectionResult = DetectionResult(way=way, result=context['judge'],
                                               processed_img_path=context['append_img'],
                                               img_path=save_url, patient_id="1001")
             detectionResult.save()
