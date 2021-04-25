@@ -60,6 +60,12 @@
 <script type="text/javascript">
     var chartDom = document.getElementById('main');
     var myChart = echarts.init(chartDom);
+
+    var selectLocation={
+        callbackFun:function(){
+            location.reload();
+        }
+    }
     // var option;
 
     var lines = [];

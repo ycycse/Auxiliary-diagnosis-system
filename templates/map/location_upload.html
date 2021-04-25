@@ -10,6 +10,9 @@
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=CX3nEniiQmgipggUn0ybtpqOrsKOYlBr"></script>
     <script type="text/javascript" src="{% static 'map/js/public.js' %}"></script>
+    <script type="text/javascript" src="{% static 'layui/layui.js' %}"></script>
+
+    <link type="text/css" href="{% static 'layui/css/layui.css' %}"/>
 </head>
 
 <body onresize="mapResize()">
@@ -1453,21 +1456,32 @@
         let lat = coordinate.split(",")[1];
         console.log("lng: " + lng + ", " + "lat: ", +lat);
         //console.log(typeof (lat));
+        console.log(window.opener);
+
 
         $.ajax({
-            type:'post',
-            url:"{% url 'epidemic_map:epidemic-map' %}",
-            data:{
+            type: 'post',
+            url: "{% url 'epidemic_map:epidemic-map' %}",
+            data: {
                 longitude: lng,
                 latitude: lat,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
-            dataType:'json',
-            success:function(data){
+            dataType: 'json',
+            success: function (data) {
                 console.log(data.status);
+
+                {#layui.use('layer', function () {#}
+                {#    var layer = layui.layer;#}
+                {##}
+                {#    layer.msg('上传成功');#}
+                {# });#}
+                window.opener.selectLocation.callbackFun();
+                window.close();
             }
         });
     }
+
 </script>
 
 </html>
