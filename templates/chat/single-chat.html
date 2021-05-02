@@ -133,6 +133,19 @@
 {% block script %}
     <script>
 
+        function visit(e) {
+            //console.log(e);
+            let fatherDom = e.parentNode.parentNode.parentNode;
+            //console.log(fatherDom);
+            let childs = fatherDom.childNodes;
+            //console.log(childs);
+            let msgDom = childs[3];
+            console.log(msgDom);
+            let msg = msgDom.innerText;
+            console.log(msg);
+            window.location.href = msg;
+        }
+
         function getCookie(cookiename) {
             var name = cookiename + "=";
             var cs = document.cookie.split(';');
@@ -154,9 +167,7 @@
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Edit</a>
-                                            <a class="dropdown-item" href="#">Share</a>
-                                            <a class="dropdown-item" href="#">Delete</a>
+                                            <a class="dropdown-item" href="#" onclick="visit(this)">访问链接</a>
                                         </div>
                                     </div>
 
@@ -182,21 +193,19 @@
 										<span class="date-time text-muted">` + sendUserNickname + ',' + now + `</span>
 										<div class="message-row d-flex align-items-center">
 
-											<div class="message-content p-3">`
-                + msg +
-                `</div>
-
 											<div class="dropdown">
 												<a class="text-muted ms-1 p-2 text-muted" href="#"
 													data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													<i class="zmdi zmdi-more-vert"></i>
 												</a>
 												<div class="dropdown-menu dropdown-menu-right">
-													<a class="dropdown-item" href="#">Edit</a>
-													<a class="dropdown-item" href="#">Share</a>
-													<a class="dropdown-item" href="#">Delete</a>
+													<a class="dropdown-item" href="#" onclick="visit(this)">访问链接</a>
 												</div>
 											</div>
+
+											<div class="message-content p-3">`
+                + msg +
+                `</div>
 
 										</div>
 									</div>
@@ -230,6 +239,7 @@
             let message = data['message'];
             let code = message.code;
 
+            //用户发送信息
             if (code == 200) {
                 messageList = message.messageList;
                 let messageItem = message.messageItem;
@@ -252,7 +262,7 @@
                 div.scrollTop = div.scrollHeight;
             }
 
-
+            //用户上线信息
             if (code == 100) {
                 userList = message.userList;
                 let newComer = message.newComer;
@@ -292,15 +302,17 @@
 
             }
 
-
+            //用户离线信息
             if (code == 888) {
                 userList = message.userList;
                 //total_user_list = message.total_user_list;
                 let leave_user = message.leave_user;
                 console.log(leave_user + "离开聊天室了");
+                document.getElementById('online-status').innerHTML = '对方正忙';
                 console.log(userList);
             }
 
+            //用户查询历史信息
             if (code == 666) {
                 let applicant = message.applicant;
                 let history_message_list = message.history_message_list;
@@ -356,6 +368,7 @@
             let message = data['message'];
             let code = message.code;
 
+            //用户上线信息
             if (code == 100) {
                 online_user_list = message.online_user_list;
                 let unread_sender_list = message.unread_sender_list;
@@ -411,6 +424,7 @@
 
             }
 
+            //用户离线信息
             if (code == 888) {
                 online_user_list = message.online_user_list;
 
@@ -450,6 +464,7 @@
                 }
             }
 
+            //用户发送消息
             if (code == 200) {
                 let receiver_name = message.receiver_name;
                 let sender_name = message.sender_name;

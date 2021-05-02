@@ -23,7 +23,7 @@ context = {}
 
 
 class Util:
-    index = 0;
+    index = 1
 
 
 class PicProcessView(View):
@@ -91,6 +91,7 @@ class PicProcessView(View):
             Util.index = detectionResult.index
         else:
             print("no file")
+
         print(context)
         print("finished")
         return redirect("/diagnosis/result_detail/" + str(Util.index) + "/")
