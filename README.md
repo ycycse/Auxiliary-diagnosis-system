@@ -77,6 +77,12 @@ pip install -r requirements.txt
 提供文件上传接口
 ![展示-图片上传页面](./photos/pic_upload.png '图片上传')
 
+点击该区域或拖拽图片实现文件上传
+![展示-图片上传页面](./photos/pic_upload2.png '图片上传')
+
+跳转至图像诊断结果详情
+![展示-图片上传页面](./photos/photo_segment.png '图片上传')
+
 检测结果展示
 ![展示-诊断结果页面](./photos/result.png '诊断结果')
 
@@ -121,6 +127,9 @@ pip install -r requirements.txt
 ![展示-聊天室](./photos/chat_room6.png '聊天室')
 
 若信息为链接点击信息框左侧三点，再点击”访问链接“即可跳转页面
+![展示-诊断结果页面](./photos/link_visit.png '复制链接')
+![展示-诊断结果页面](./photos/link_visit2.png '复制链接')
+
 
 
 
