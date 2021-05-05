@@ -114,6 +114,9 @@ class IndexView(View):
 
 
 class GetChatRoomView(View):
+    """
+        获取或创建双人聊天室
+    """
     def get(self, request, to_username):
         print(to_username)
         # 接收数据

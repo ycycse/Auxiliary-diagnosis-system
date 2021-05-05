@@ -6,7 +6,7 @@
 ## 快速开始
 克隆项目
 ```
-git clone https://gitee.com/Alison486/CTAI_web_new.git
+git clone https://github.com/yccye/Auxiliary-diagnosis-system.git
 ```
 
 安装第三方包
@@ -80,15 +80,21 @@ pip install -r requirements.txt
 检测结果展示
 ![展示-诊断结果页面](./photos/result.png '诊断结果')
 
+点击“复制链接”按钮，可实现诊断结果链接的复制
+![展示-诊断结果页面](./photos/link_copy.png '复制链接')
+
 ### 疫情可视化
 
-这部分需要修改成轨迹图
+感染人员轨迹图
 ![展示-疫情地图页面](./photos/map.png '疫情地图')
+
+可点击左侧齿轮图标唤起坐标上传窗口,进行坐标上传
+![展示-疫情地图页面](./photos/position_upload.png '坐标上传')
+
 
 ### 医患聊天页面
 
-点击右上角按钮可弹出好友框或最近聊天框
-![展示-聊天室](./photos/chat_index.png '聊天室')
+点击左侧侧边栏图标切换好友框以及最近聊天框
 
 好友框
 ![展示-聊天室](./photos/chat_index2.png '聊天室')
@@ -114,7 +120,8 @@ pip install -r requirements.txt
 ![展示-聊天室](./photos/chat_room5.png '聊天室')
 ![展示-聊天室](./photos/chat_room6.png '聊天室')
 
-由于目前尚未添加患者视图，故仅测试医生之间聊天功能
+若信息为链接点击信息框左侧三点，再点击”访问链接“即可跳转页面
+
 
 
 

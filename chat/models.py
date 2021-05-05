@@ -16,6 +16,7 @@ class ChatRoom(models.Model):
     # name = models.CharField(max_length=128, verbose_name="群聊名称")
     members = models.ManyToManyField(User, verbose_name="聊天室成员")
 
+    # 双人聊天室获取另一成员
     def get_another_member(self, member_name):
         members = self.members.all()
         if len(members) > 2:
