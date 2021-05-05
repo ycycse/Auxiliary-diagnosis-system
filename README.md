@@ -4,7 +4,7 @@
 项目团队对本项目保有著作权
 
 ## 演示视频
-<video src="./photos/display.mp4" controls="controls" width="500" height="300">您的浏览器不支持播放该视频！</video>
+位于项目的photos/display.mp4中，由于github不支持在readme中嵌入视频，故无法在当前页面中显示，需要自取。
 
 ## 快速开始
 克隆项目
