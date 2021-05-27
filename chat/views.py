@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 
 from login.models import User
 from .models import ChatRoom, Message
@@ -117,6 +117,7 @@ class GetChatRoomView(View):
     """
         获取或创建双人聊天室
     """
+
     def get(self, request, to_username):
         print(to_username)
         # 接收数据
@@ -146,3 +147,75 @@ class GetChatRoomView(View):
 
         # 返回响应
         return response
+
+
+class CreateGroupChatView(View):
+    """
+    新建群聊
+    """
+
+    def post(self, request):
+        # 接收数据
+        print(request.POST)
+        members = request.POST.get('members')
+        members = json.loads(members)
+
+        # 创建群聊
+        chat_room = ChatRoom.objects.create()
+        # 添加成员
+        for username in members:
+            user = User.objects.get(username=username)
+            chat_room.members.add(user)
+        self_name = request.session.get('username')
+        self_user = User.objects.get(username=self_name)
+        chat_room.members.add(self_user)
+
+        print(chat_room)
+        print(chat_room.members.all())
+
+        # 下一步需要给多人聊天室创建单独的视图函数和前端页面
+
+        return JsonResponse({
+            'status': 'OK',
+        })
+
+
+class NewGroupChatView(View):
+    """
+    返回新建群聊表单页面
+    """
+
+    def get(self, request):
+        return render(request, 'chat/view/createGroupChat.html')
+
+    def post(self, request):
+        # 从session中获取相应参数
+        username = request.session.get('username')
+        if not username:
+            print("登录状态有误，请重新登录")
+            return HttpResponseForbidden("登录状态有误，请重新登录")
+
+        # print(username)
+        # 处理参数
+        user_list = User.objects.all()
+        # print(user_list)
+        friend_list = []
+        index = 1
+        for user in user_list:
+            if user.username == username:
+                continue
+            else:
+                friend_item = {
+                    'value': index,
+                    'title': user.nickname + '(' + user.username + ')',
+                    'disabled': '',
+                    'checked': '',
+                }
+                index = index + 1
+                friend_list.append(friend_item)
+        # print(friend_list)
+
+        return JsonResponse({
+            'status': 'OK',
+            'friend_list': friend_list,
+        })

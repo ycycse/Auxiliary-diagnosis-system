@@ -9,4 +9,6 @@ websocket_urlpatterns = [
     # url(r'^ws/chat/(?P<room_name>[^/]+)/$', consumers.ChatConsumer),
     path('ws/chat/<room_name>/', consumers.ChatConsumer),
     path('wss/chat/<room_name>/', consumers.ChatConsumer),
+    path('ws/group_chat/<Room_name>/', consumers.GroupChatConsumer),
+    path('wss/group_chat/<Room_name>/', consumers.GroupChatConsumer),
 ]
