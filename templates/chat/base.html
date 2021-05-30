@@ -108,6 +108,9 @@
             <a class="mb-xl-3 mb-md-2 nav-link active" data-toggle="pill" href="#nav-tab-contact" role="tab"><i
                     class="zmdi zmdi-account-circle"></i></a>
 
+            <a class="mb-xl-3 mb-md-2 nav-link" data-toggle="pill" href="#nav-tab-group-chat" role="tab"><i
+                    class="zmdi zmdi-layers"></i></a>
+
             <div class="mb-xl-3 mb-md-2 nav-link d-none d-sm-block flex-grow-1" data-toggle="pill"
                  role="tab"></div>
             <a class="mt-xl-3 mt-md-2 nav-link light-dark-toggle" href="javascript:void(0);">
@@ -130,7 +133,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="mb-0 text-primary">聊天</h3>
                     <div>
-                        <button class="btn btn-dark" type="button" id="new-group-chat-btn">新建群聊</button>
+                        {#                        <button class="btn btn-dark" type="button" id="new-group-chat-btn">新建群聊</button>#}
 
                     </div>
                 </div>
@@ -157,8 +160,8 @@
                     </div>
                 </div>
 
+                <!--最近聊天列表--->
                 <ul class="chat-list" id="chat-list">
-                    <!--在线活跃用户-->
                     {% for to_user in to_user_list %}
                         <li id="chat-{{ to_user.username }}">
                             <div class="hover_action">
@@ -190,7 +193,7 @@
                                         <div class="media-body overflow-hidden">
                                             <div class="d-flex align-items-center mb-1">
                                                 <h6 class="text-truncate mb-0 me-auto">{{ to_user.nickname }}</h6>
-                                                <p class="small text-muted text-nowrap ms-4 mb-0">11:08 am</p>
+                                                <p class="small text-muted text-nowrap ms-4 mb-0"></p>
                                             </div>
                                             <div class="text-truncate">
                                             </div>
@@ -319,6 +322,81 @@
                             </li>
                         {% endif %}
                     {% endfor %}
+
+                </ul>
+            </div>
+
+            <!--群聊-->
+            <div class="tab-pane fade" id="nav-tab-group-chat" role="tabpanel">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0 text-primary">群聊</h3>
+                    <div>
+                        <button class="btn btn-dark" type="button" id="new-group-chat-btn">新建群聊</button>
+
+                    </div>
+                </div>
+
+                <div class="form-group input-group-lg search mb-3">
+                    <i class="zmdi zmdi-search"></i>
+                    <i class="zmdi zmdi-dialpad"></i>
+                    <input type="text" class="form-control" placeholder="查找...">
+                </div>
+
+
+                <!--群聊标签-->
+                <div class="header d-flex justify-content-between ps-3 pe-3 mb-1">
+                    <span>群聊</span>
+                    <div class="dropdown">
+                        <a class="btn btn-link px-1 py-0 border-0 text-muted dropdown-toggle" href="#"
+                           role="button" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false"><i class="zmdi zmdi-filter-list"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--群聊列表-->
+                <ul class="chat-list" id="group-chat-list">
+                    {% for g_chat in g_chat_list %}
+                        <li id="group-chat-{{ g_chat.g_chat_id }}">
+                            <div class="hover_action">
+                                <button type="button" class="btn btn-link text-info"><i
+                                        class="zmdi zmdi-eye"></i></button>
+                                <button type="button" class="btn btn-link text-warning"><i
+                                        class="zmdi zmdi-star"></i></button>
+                                <button type="button" class="btn btn-link text-danger"><i
+                                        class="zmdi zmdi-delete"></i></button>
+                            </div>
+                            <!--获取聊天室视图的链接-->
+                            <a href="{% url 'chat:get_group_chat' g_chat.g_chat_id %}" class="card">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="avatar me-3">
+                                            <span class="status rounded-circle"></span>
+                                            <!--群聊头像-->
+                                            <img class="avatar rounded-circle"
+                                                 src="{% static 'web_im/dist/assets/images/group.jpg' %}"
+                                                 alt="avatar">
+
+                                        </div>
+                                        <div class="media-body overflow-hidden">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="text-truncate mb-0 me-auto">{{ g_chat.g_chat_name }}</h6>
+                                                <p class="small text-muted text-nowrap ms-4 mb-0"></p>
+                                            </div>
+                                            <div class="text-truncate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+
 
                 </ul>
             </div>

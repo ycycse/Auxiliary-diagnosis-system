@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    聊天室
+    多人聊天室
 {% endblock %}
 
 {% block main %}
@@ -20,23 +20,17 @@
                                 <div class="me-3 show-user-detail">
                                     <span class="status rounded-circle"></span>
 
-                                    {% if current_to_user.identity == 0 %}
-                                        <img class="avatar rounded-circle"
-                                             src="{% static 'web_im/dist/assets/images/doctor.jpg' %}"
-                                             alt="avatar">
-                                    {% else %}
-                                        <img class="avatar rounded-circle"
-                                             src="{% static 'web_im/dist/assets/images/patient.jpg' %}"
-                                             alt="avatar">
-
-                                    {% endif %}
+                                    <!--群聊图标-->
+                                    <img class="avatar rounded-circle"
+                                         src="{% static 'web_im/dist/assets/images/group.jpg' %}"
+                                         alt="avatar">
 
                                 </div>
                                 <div class="media-body overflow-hidden">
                                     <div class="d-flex align-items-center mb-1">
-                                        <h6 class="text-truncate mb-0 me-auto">{{ current_to_user.nickname }}</h6>
+                                        <h6 class="text-truncate mb-0 me-auto">{{ g_chat_name }}</h6>
                                     </div>
-                                    <div class="text-truncate" id="online-status">online</div>
+                                    <div class="text-truncate" id="online-status">{{ members_count }} 个成员</div>
                                 </div>
                             </div>
                         </div>
@@ -132,8 +126,7 @@
 
 {% block script %}
     <script>
-
-        //访问链接
+        // 访问链接方法
         function visit(e) {
             //console.log(e);
             let fatherDom = e.parentNode.parentNode.parentNode;
@@ -147,6 +140,7 @@
             window.location.href = msg;
         }
 
+        // 获取Cookie中对应值方法
         function getCookie(cookiename) {
             var name = cookiename + "=";
             var cs = document.cookie.split(';');
@@ -156,6 +150,7 @@
             }
         }
 
+        //推入信息（右侧）
         function push_right_message(msg, now) {
             document.getElementById('chat-content-list').innerHTML += `<li class="d-flex message right">
                             <div class="message-body"><span class="date-time text-muted">` + now + `
@@ -181,6 +176,7 @@
                         </li>`
         }
 
+        // 推入信息（左侧）
         function push_left_message(msg, now, sendUserNickname) {
             document.getElementById('chat-content-list').innerHTML += `<li class="d-flex message">
 
@@ -222,10 +218,12 @@
 
         var roomName ={{ room_name_json }};
 
+        //连接多人聊天室socket
         var chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+            'ws://' + window.location.host + '/ws/group_chat/' + roomName + '/'
         );
 
+        //发送进入聊天室信息
         chatSocket.onopen = function (e) {
             //console.log(e);
             //console.log(username + '进入聊天室了');
@@ -272,17 +270,20 @@
                 console.log("当前聊天室用户：");
                 console.log(userList);
 
-                if (userList.length > 2 && username === newComer) {
-                    alert('当前聊天室已满！');
-                    top.location.reload();
-                }
+                //检查双人聊天室是否已满
+                //if (userList.length > 2 && username === newComer) {
+                //    alert('当前聊天室已满！');
+                //    top.location.reload();
+                //}
 
-                if (userList.length == 1) {
-                    document.getElementById('online-status').innerHTML = '对方正忙';
-                } else if (userList.length == 2) {
-                    document.getElementById('online-status').innerHTML = '对方正在房间中'
-                }
+                //更新对方的在线状态
+                //if (userList.length == 1) {
+                //    document.getElementById('online-status').innerHTML = '对方正忙';
+                //} else if (userList.length == 2) {
+                //    document.getElementById('online-status').innerHTML = '对方正在房间中'
+                //}
 
+                //进入聊天室的是当前用户，则将缓存信息列表中所有的信息推入聊天框中
                 if (newComer === username) {
                     messageList.forEach(function (value, index) {
                         let text = value.text;
@@ -309,7 +310,8 @@
                 //total_user_list = message.total_user_list;
                 let leave_user = message.leave_user;
                 console.log(leave_user + "离开聊天室了");
-                document.getElementById('online-status').innerHTML = '对方正忙';
+                //更新对方在线状态
+                //document.getElementById('online-status').innerHTML = '对方正忙';
                 console.log(userList);
             }
 
@@ -351,7 +353,7 @@
             }));
         }
 
-
+        //全局group
         var indexSocket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/index/'
         );
@@ -369,7 +371,7 @@
             let message = data['message'];
             let code = message.code;
 
-             //用户上线信息
+            //用户上线信息
             if (code == 100) {
                 online_user_list = message.online_user_list;
                 let unread_sender_list = message.unread_sender_list;
@@ -482,7 +484,7 @@
                 }
             }
 
-             //用户发送消息
+            //用户发送消息
             if (code == 200) {
                 let members_count = message.members_count;
                 let sender_name = message.sender_name;

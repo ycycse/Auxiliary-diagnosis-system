@@ -12,6 +12,7 @@ class ChatRoom(models.Model):
     """
     聊天室（供双人或多人）
     """
+    name = models.CharField(max_length=255, null=True, verbose_name='聊天室名称')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, null=False, editable=False)
     # name = models.CharField(max_length=128, verbose_name="群聊名称")
     members = models.ManyToManyField(User, verbose_name="聊天室成员")

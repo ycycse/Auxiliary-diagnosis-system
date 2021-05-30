@@ -51,6 +51,7 @@
         var username = getCookie('username');
         var online_user_list = new Array();
 
+        //全局group
         var indexSocket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/index/'
         );
@@ -71,6 +72,8 @@
             if (code == 100) {
                 online_user_list = message.online_user_list;
                 let unread_sender_list = message.unread_sender_list;
+                let unread_g_chat_list = message.unread_g_chat_list;
+
                 let newComer = message.newComer;
                 console.log(online_user_list);
                 console.log(newComer + "上线了");
@@ -124,6 +127,19 @@
                     }
                 }
 
+                //更新群聊列表
+                let group_chat_list = document.getElementById('group-chat-list').getElementsByTagName('li');
+                for (let i = 0; i < group_chat_list.length; i++) {
+                    let group_chat = group_chat_list[i];
+                    let group_chat_id = group_chat.id.slice(11);
+                    console.log(group_chat_id);
+                    //判断该聊天室是否有未读消息
+                    if (unread_g_chat_list.includes(group_chat_id)) {
+                        let text = group_chat.getElementsByClassName('text-truncate')[1];
+                        text.innerHTML = "[有未读消息]";
+                    }
+                }
+
             }
 
             if (code == 888) {
@@ -168,63 +184,95 @@
                 }
             }
 
+            //用户发送消息
             if (code == 200) {
-                let receiver_name = message.receiver_name;
+                let members_count = message.members_count;
                 let sender_name = message.sender_name;
                 let room_id = message.room_id;
                 let text = message.text;
 
-                if (username == receiver_name) {
-                    console.log("有未读消息！");
-                    console.log(text);
+                if (members_count == 2) {
+                    let receiver_name = message.receiver_name;
+                    if (username == receiver_name) {
+                        console.log("有未读消息！");
+                        console.log(text);
 
-                    let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
-                    console.log(contact_list);
-                    for (let i = 0; i < contact_list.length; i++) {
-                        //console.log(contact_list[i].id);
-                        let contact = contact_list[i];
-                        let contact_name = contact.id.slice(8);
-                        console.log(contact_name);
-                        if (contact_name != sender_name) {
-                            continue;
-                        } else {
-                            if (online_user_list.includes(contact_name)) {
-                                let text = contact.getElementsByClassName('text-truncate')[1];
-                                console.log(text);
-                                text.innerHTML = "[在线]" + "有未读消息";
+                        //更新联系人列表
+                        let contact_list = document.getElementById('contact-list').getElementsByTagName('li');
+                        console.log(contact_list);
+                        for (let i = 0; i < contact_list.length; i++) {
+                            //console.log(contact_list[i].id);
+                            let contact = contact_list[i];
+                            let contact_name = contact.id.slice(8);
+                            console.log(contact_name);
+                            if (contact_name != sender_name) {
+                                continue;
                             } else {
-                                let text = contact.getElementsByClassName('text-truncate')[1];
-                                console.log(text);
-                                text.innerHTML = "[离线]" + "有未读消息";
+                                if (online_user_list.includes(contact_name)) {
+                                    let text = contact.getElementsByClassName('text-truncate')[1];
+                                    console.log(text);
+                                    text.innerHTML = "[在线]" + "有未读消息";
+                                } else {
+                                    let text = contact.getElementsByClassName('text-truncate')[1];
+                                    console.log(text);
+                                    text.innerHTML = "[离线]" + "有未读消息";
+                                }
+                                break;
                             }
-                            break;
+
+                        }
+
+                        //更新最近聊天列表
+                        let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
+                        console.log(chat_list);
+                        for (let i = 0; i < chat_list.length; i++) {
+                            let chat = chat_list[i];
+                            let chat_name = chat.id.slice(5);
+                            console.log(chat_name);
+                            if (chat_name != sender_name) {
+                                continue;
+                            } else {
+                                if (online_user_list.includes(chat_name)) {
+                                    let text = chat.getElementsByClassName('text-truncate')[1];
+                                    console.log(text);
+                                    text.innerHTML = "[在线]" + "有未读消息";
+                                } else {
+                                    let text = chat.getElementsByClassName('text-truncate')[1];
+                                    console.log(text);
+                                    text.innerHTML = "[离线]" + "有未读消息";
+                                }
+                                break;
+                            }
+
                         }
 
                     }
 
-                    let chat_list = document.getElementById('chat-list').getElementsByTagName('li');
-                    console.log(chat_list);
-                    for (let i = 0; i < chat_list.length; i++) {
-                        let chat = chat_list[i];
-                        let chat_name = chat.id.slice(5);
-                        console.log(chat_name);
-                        if (chat_name != sender_name) {
-                            continue;
-                        } else {
-                            if (online_user_list.includes(chat_name)) {
-                                let text = chat.getElementsByClassName('text-truncate')[1];
-                                console.log(text);
-                                text.innerHTML = "[在线]" + "有未读消息";
-                            } else {
-                                let text = chat.getElementsByClassName('text-truncate')[1];
-                                console.log(text);
-                                text.innerHTML = "[离线]" + "有未读消息";
-                            }
-                            break;
-                        }
+                    //若为多人聊天室
+                    if (members_count > 2) {
+                        //获取该用户所在的所有聊天室
+                        let group_chat_list = document.getElementById('group-chat-list').getElementsByClassName('li');
 
+                        for (let i = 0; i < group_chat_list.length; i++) {
+                            //获取聊天室id
+                            let group_chat = group_chat_list[i];
+                            let group_chat_id = group_chat.id.slice(11);
+                            console.log(group_chat_id);
+
+                            //若有新信息的聊天室不是这一聊天室跳过
+                            if (group_chat_id != room_id) {
+                                continue;
+                            }
+
+                            //更新群聊标签
+                            let text = chat.getElementsByClassName('text-truncate')[1];
+                            text.innerHTML = "有未读消息";
+                        }
                     }
+
                 }
+
+
             }
         };
 

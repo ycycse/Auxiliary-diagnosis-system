@@ -44,6 +44,26 @@
 
 <body style="background-color: #ffffff">
 <form class="layui-form">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12" style="padding-bottom: 0;">
+            <div class="layui-card">
+                <div class="layui-card-body" pad15="">
+                    <div class="layui-form" lay-filter="">
+
+                        <!--群聊名称--->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">群聊名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="group_chat_name" lay-verify="required" lay-vertype="tips"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="members"></div>
     <div class="foot">
         <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit=""
@@ -102,17 +122,27 @@
             }
             console.log(members);
 
+            let group_chat_name = $('input[name="group_chat_name"]').val();
+            console.log(group_chat_name);
+
+            //关闭当前弹出框
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+
             $.ajax({
                 url: "{% url 'chat:create_group_chat' %}",
                 type: 'post',
                 dataType: 'json',
                 data: {
                     members: JSON.stringify(members),
+                    group_chat_name: group_chat_name,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 success: function (data) {
                     console.log(data.status);
 
+                    //父页面刷新
+                    parent.location.reload();
                 }
 
             });

@@ -229,13 +229,40 @@ def to_index_message(text_data_json):
         if username not in online_user_list:
             online_user_list.append(username)
 
+        # 获取当前用户
         user = User.objects.get(username=username)
+
         unread_sender_list = []
+        # 基于双人聊天室信息记录查询有未读消息的发送者
         unread_message_list = Message.objects.filter(receiver=user).filter(status=Message.UNREAD)
         for unread_msg in unread_message_list:
             if unread_msg.sender.username not in unread_sender_list:
                 unread_sender_list.append(unread_msg.sender.username)
                 print(unread_sender_list)
+
+        # 基于多人聊天室消息记录查询有未读消息的聊天室
+        unread_g_chat_list = []
+
+        # 获取当前用户所在的所有群聊
+        chat_list = ChatRoom.objects.filter(members=user)
+        g_chat_list = []  # 其中的是聊天室对象
+        for chat_item in chat_list:
+            if chat_item.members.count() > 2:
+                g_chat_list.append(chat_item)
+
+        # 获取群聊中所有信息记录(每个群聊对应一个消息列表)
+        for g_chat in g_chat_list:
+            # 获取该聊天室id
+            g_chat_id = g_chat.id
+            # 获取该聊天室消息列表
+            msg_list = GroupMessage.objects.filter(chat_room=g_chat)
+            # 查询该聊天室中是否有对当前用户而言状态为未读的消息
+            for msg in msg_list:
+                msg_status = GroupMessageStatus.objects.filter(receiver=user, message=msg)
+                if msg_status:
+                    msg_status=msg_status[0].status
+                    if msg_status == GroupMessageStatus.UNREAD:
+                        unread_g_chat_list.append(g_chat_id)
 
         # 封装结果
         res = {
@@ -243,6 +270,7 @@ def to_index_message(text_data_json):
             'online_user_list': online_user_list,
             'newComer': username,
             'unread_sender_list': unread_sender_list,
+            'unread_g_chat_list': unread_g_chat_list,
         }
 
     # 用户离线
@@ -274,15 +302,27 @@ def to_index_message(text_data_json):
         except:
             print("未找到相应聊天室")
 
-        receiver = chat_room.get_another_member(sender_name)
+        # 判断是双人聊天室还是多人聊天室
+        members_count = chat_room.members.count()
+        if members_count == 2:
+            receiver = chat_room.get_another_member(sender_name)
 
-        res = {
-            'code': 200,
-            'sender_name': sender_name,
-            'text': text,
-            'receiver_name': receiver.username,
-            'room_id': room_id,
-        }
+            res = {
+                'code': 200,
+                'sender_name': sender_name,
+                'text': text,
+                'receiver_name': receiver.username,
+                'room_id': room_id,
+                'members_count': members_count,
+            }
+        else:
+            res = {
+                'code': 200,
+                'sender_name': sender_name,
+                'text': text,
+                'room_id': room_id,
+                'members_count': members_count,
+            }
 
     # 返回响应
     return res
