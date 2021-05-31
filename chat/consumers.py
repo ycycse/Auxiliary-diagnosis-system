@@ -253,14 +253,15 @@ def to_index_message(text_data_json):
         # 获取群聊中所有信息记录(每个群聊对应一个消息列表)
         for g_chat in g_chat_list:
             # 获取该聊天室id
-            g_chat_id = g_chat.id
+            g_chat_id = str(g_chat.id)
+            # print(type(g_chat_id))
             # 获取该聊天室消息列表
             msg_list = GroupMessage.objects.filter(chat_room=g_chat)
             # 查询该聊天室中是否有对当前用户而言状态为未读的消息
             for msg in msg_list:
                 msg_status = GroupMessageStatus.objects.filter(receiver=user, message=msg)
                 if msg_status:
-                    msg_status=msg_status[0].status
+                    msg_status = msg_status[0].status
                     if msg_status == GroupMessageStatus.UNREAD:
                         unread_g_chat_list.append(g_chat_id)
 
