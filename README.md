@@ -16,7 +16,6 @@ git clone https://github.com/yccye/Auxiliary-diagnosis-system.git
 ``` 
 pip install -r requirements.txt
 ```
-然后须在项目根目录下创建logs文件夹，具体结构如下所示
 
 ## 项目结构说明
 ```
