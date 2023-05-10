@@ -4,7 +4,7 @@
 项目团队对本项目保有著作权
 
 ## 演示视频
-位于项目的photos/display.mp4中，由于github不支持在readme中嵌入视频，故无法在当前页面中显示，需要自取。
+https://www.bilibili.com/video/BV1bf4y1a7hU/?spm_id_from=333.999.0.0&vd_source=376d078c699775d24f4eb740aa0fcb62
 
 ## 快速开始
 克隆项目
