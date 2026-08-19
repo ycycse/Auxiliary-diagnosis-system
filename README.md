@@ -1,9 +1,11 @@
+
+
 # 基于医学图像的辅助诊断系统
 
 ## 快速开始
 克隆项目
 ```
-git clone https://github.com/yccye/Auxiliary-diagnosis-system.git
+git clone https://github.com/ycycse/Auxiliary-diagnosis-system.git
 ```
 
 安装第三方包
@@ -125,11 +127,3 @@ pip install -r requirements.txt
 若信息为链接点击信息框左侧三点，再点击”访问链接“即可跳转页面
 ![展示-诊断结果页面](./photos/link_visit.png '复制链接')
 ![展示-诊断结果页面](./photos/link_visit2.png '复制链接')
-
-
-
-
-
-
-
-
